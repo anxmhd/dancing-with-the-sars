@@ -6,7 +6,7 @@ Dancing with the SARs is a scientific web application for exploring agricultural
 
 ## Current state
 
-This repository contains only the project foundation. There are no application features, API routes, verified datasets, or scientific results yet. Read [README.md](README.md), [the architecture](docs/ARCHITECTURE.md), [the data catalog](docs/DATA_CATALOG.md), [the roadmap](docs/ROADMAP.md), and [the status](docs/STATUS.md) before changing the project.
+This repository contains the project foundation and shared first-workflow contracts. There are no application features, API routes, verified datasets, or scientific results yet. Read [README.md](README.md), [the architecture](docs/ARCHITECTURE.md), [the domain model](docs/DOMAIN_MODEL.md), [the data contracts](docs/DATA_CONTRACTS.md), [the team contracts](docs/TEAM_CONTRACTS.md), [the integration guidelines](docs/INTEGRATION_GUIDELINES.md), [the data catalog](docs/DATA_CATALOG.md), [the roadmap](docs/ROADMAP.md), and [the status](docs/STATUS.md) before changing the project.
 
 ## Scope and data rules
 
@@ -24,6 +24,7 @@ This repository contains only the project foundation. There are no application f
 - The scientific layer must remain independent of HTTP and presentation code. Data access and scientific processing must remain separate.
 - Do not add speculative modules, endpoints, databases, cloud services, or dependencies. Add a dependency only for an approved, concrete requirement.
 - Keep API contracts explicit and validate inputs and outputs. Do not create placeholder endpoints.
+- Treat `docs/DATA_CONTRACTS.md` as the current shared semantic contract for the first workflow. Before API implementation, agree on a machine-readable contract format and keep one authoritative shape rather than independent frontend/backend copies.
 
 ## Development conventions
 

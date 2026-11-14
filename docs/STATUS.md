@@ -8,6 +8,7 @@ Last updated: 2026-11-14
 - Initial React/TypeScript/Vite frontend shell with a Vitest smoke test.
 - Python package metadata, Pytest smoke test, Ruff configuration, and a generated `uv.lock`.
 - Architecture, dataset roadmap/status vocabulary, methodology safeguards, validation approach, contribution workflow, and phased roadmap.
+- Shared first-workflow domain model, semantic data contracts, module ownership, naming rules, and integration guidelines. These documents do not represent implemented endpoints or verified data.
 - Git ignore/line-ending/editor settings, local branch `main`, and a CI workflow for pushes and pull requests to `main`.
 
 ## Not established
@@ -23,4 +24,4 @@ On Python 3.13.4 and Node.js 22.16.0, `uv sync --locked`, `uv run --locked pytes
 
 ## Next step
 
-Review this foundation. The next implementation phase should define the first concrete user workflow and its acceptance criteria before adding a feature or data source.
+Review the shared contracts and resolve source-dependent questions for the first parcel-level Sentinel-2 NDVI workflow before assigning implementation tasks. The boundary, parcel source, product coverage, processing level, aggregation method, and quality policy remain unverified or undecided.

@@ -2,32 +2,58 @@
 
 ## Current implementation
 
-The repository is a monorepo with a minimal React/TypeScript frontend and a minimal Python package. It does not yet contain an API, dataset access, geospatial processing, or feature modules.
+The repository is a monorepo with a minimal React/TypeScript frontend and a minimal Python package. It has no API, dataset access, geospatial processing, or feature modules. [The first-workflow contract](DATA_CONTRACTS.md) and [domain model](DOMAIN_MODEL.md) specify intended boundaries; they do not mean those components exist.
 
-## Boundaries
+## First workflow
+
+The proposed first scientific workflow is to explore one verified agricultural parcel's Sentinel-2 NDVI history. It is gated on finding and inspecting a suitable parcel source and product coverage. It reports an indicator and its provenance; it does not classify stress or infer cause. See [the contracts](DATA_CONTRACTS.md) and [integration guidelines](INTEGRATION_GUIDELINES.md).
+
+## Responsibilities and ownership
 
 | Area | Owns | Depends on | Must not own |
 |---|---|---|---|
-| `frontend/` | Browser rendering and interaction | Explicit API/data contracts when introduced | Satellite archive access or scientific calculations |
-| `backend/src/dancing_with_sars/` | Python application package; future API and domain integration | Domain/scientific interfaces | Browser presentation |
-| Future API module | HTTP request/response validation and orchestration | Domain interfaces and prepared outputs | Frontend code or undocumented processing |
-| Future domain module | Stable project concepts and contracts | Standard Python types | HTTP framework, provider-specific access, or UI |
-| Future science module | Reproducible calculations and geospatial methods | Explicit inputs and focused scientific libraries | HTTP and UI frameworks |
-| Future data module | Source metadata, acquisition adapters, and data validation | Approved sources and formats | Presentation and scientific interpretation |
+| `frontend/` | User interactions, map/chart presentation, frontend types, API client, loading/error/empty states | The published JSON contract and backend responses | Satellite product loading, raster processing, or scientific calculations |
+| Backend API/application | Request validation, orchestration, serialization, HTTP errors, API exposure | Domain contract and public scientific processing interface | Duplicated NDVI/quality algorithms, browser presentation, or provider-specific raster parsing |
+| Scientific data access | Reading approved product assets and source metadata; mapping product-specific metadata/quality into explicit inputs | Approved source/product definitions and documented file formats | HTTP endpoints, frontend types, or UI behavior |
+| Scientific processing | Applying the approved quality policy, calculating NDVI, parcel-level valid-pixel aggregation, and processing provenance | Explicit arrays/masks/geometries, domain concepts, focused geospatial libraries | FastAPI, API schemas, frontend code, or hidden downloads |
+| Domain concepts | Stable meanings and relationships shared across application and science | Standard language types and documented semantics | Frameworks, providers, storage schemas, or rendering |
 
-The future modules are architectural boundaries, not directories created in advance. Add them when an approved task gives them real responsibilities. Keep dependencies one-way: API/application orchestration may call domain and science interfaces; science must not depend on API or frontend. Data access stays separate from scientific transformation.
+The table describes target responsibilities. The repository currently has only the frontend shell and Python package marker; the API and scientific modules are not implemented.
 
-## Data flow
+## Data and dependency flow
 
-Approved source → acquisition → inspection and validation → documented processing → traceable derived output → API/interface → frontend visualization. Raw archives, intermediate files, and derived products remain distinct. Large source data does not belong in Git or in browser downloads.
+```mermaid
+flowchart LR
+  S[Approved satellite source] --> D[Scientific data access]
+  D --> P[Scientific processing]
+  P --> A[Backend application and API]
+  A -->|JSON contract| F[Frontend]
+  C[Shared domain and data contracts] -. constrains .-> D
+  C -. constrains .-> P
+  C -. constrains .-> A
+  C -. constrains .-> F
+```
 
-## API direction
+Permitted code dependencies are one-way: backend application/API code may call the scientific public interface; scientific access and processing must not import backend HTTP schemas or frontend code; frontend consumes the API contract and must not import Python implementation details. Provider adapters supply product data and metadata to processing. Processing returns typed results and provenance to backend orchestration, which serializes them into the API representation. It must not reimplement the scientific algorithms.
 
-FastAPI is the selected framework when a concrete API is needed. Use validated request/response models and generated OpenAPI contracts. Define a purpose and tests for each endpoint before implementation; do not add placeholder routes. No API runtime dependency or endpoint exists in this foundation.
+## Responsibility decisions for the first workflow
 
-## Frontend direction
+- **Load satellite products:** scientific data-access adapter, only after source/product and access are approved.
+- **Read source quality layers:** data-access adapter preserves the product's original flags and metadata.
+- **Apply quality masks:** scientific processing applies the documented product-specific policy to provided masks; it does not invent missing QA information.
+- **Calculate NDVI:** scientific processing, using the selected product's appropriate reflectance bands and documented processing level.
+- **Aggregate valid pixels within a parcel:** scientific processing, after a method for geometry, CRS, nodata, and statistic has been approved and validated.
+- **Create scientific provenance:** data access records source/product/acquisition references; processing records method, version, parameters, and quality treatment; backend carries these into the response.
+- **Expose results through API:** backend validates the selection, orchestrates the science call, maps errors, and serializes the documented response.
+- **Format results for users:** frontend formats the returned values for map/chart/table presentation without recalculating them.
 
-React, TypeScript strict mode, and Vite form the frontend foundation. Leaflet is the planned first map library when a verified boundary or layer is ready. Keep chart and map dependencies deferred until their use is approved.
+## API and module timing
+
+FastAPI remains the selected framework when a concrete API is approved. Do not add routes or create empty API/domain/science/data directories in advance. Use [DATA_CONTRACTS.md](DATA_CONTRACTS.md) as the current semantic contract. Before parallel API implementation, choose a single machine-readable contract artifact (likely OpenAPI for HTTP) and derive or validate consumer types and fixtures from it. No endpoint paths are fixed here.
+
+## Data flow and storage
+
+Approved source → acquisition/access → inspection → documented scientific processing → traceable parcel-level output → backend API/interface → frontend. Keep raw products, intermediates, and derived outputs distinct. Large source data does not belong in Git or browser downloads. The storage/deployment mechanism is deferred until data volume and hosting requirements are known.
 
 ## Dependency policy
 

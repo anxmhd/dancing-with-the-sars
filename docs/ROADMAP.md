@@ -6,7 +6,7 @@ This roadmap is conditional on user approval, verified data, and scientific feas
 |---|---|---|
 | 0 — Foundation | Establish project instructions, documentation, minimal frontend/Python package, checks, CI, and Git conventions. | IMPLEMENTED; TESTED (foundation checks passed) |
 | 1 — Application foundation | Define and implement only the approved application shell and real interfaces. Add FastAPI when a concrete API requirement exists. | PLANNED |
-| 2 — Geospatial/data foundation | Identify the study boundary and inspect approved parcel/reference data; define metadata and validation conventions. | PARTIALLY ESTABLISHED: Figshare parcel/NDVI archives inspected; parcel-series join and definitive study boundary unresolved. |
+| 2 — Geospatial/data foundation | Identify the study boundary and inspect approved parcel/reference data; define metadata and validation conventions. | PARTIALLY ESTABLISHED: Figshare archives inspected and exact parcel-to-CSV IDs reconciled; definitive study boundary unresolved. |
 | 3 — Vegetation monitoring | Introduce verified optical data and approved indicators with documented processing and validation. | PROCESSOR IMPLEMENTED AND SYNTHETICALLY TESTED; production policy, product access/integration, and scientific validation remain open. |
 | 4 — Radar monitoring | Introduce verified Sentinel-1 data; assess NISAR products for suitable approved comparisons. | PLANNED |
 | 5 — Climate context | Introduce approved rainfall/reanalysis variables with appropriate scale and temporal aggregation. | PLANNED |

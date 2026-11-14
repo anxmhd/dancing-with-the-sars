@@ -4,16 +4,16 @@ Monitoring agricultural dynamics and climate-related vegetation stress in Morocc
 
 ## Project status
 
-The repository currently contains the approved development foundation only. No application features, API endpoints, scientific datasets, or validated findings have been implemented. See [project status](docs/STATUS.md) and [the roadmap](docs/ROADMAP.md).
+The repository contains the approved development foundation and reproducible command-line workflows that processed one real Sentinel-2 L2A and one Sentinel-1 RTC parcel observation. NISAR GCOV catalog coverage is confirmed and a local HDF5 reader is implemented, but product access currently requires Earthdata authentication. There are no interactive application features or API endpoints, and the initial observations are not scientifically validated. See [the first result report](docs/FIRST_REAL_MULTISENSOR_RESULT.md), [project status](docs/STATUS.md), and [the roadmap](docs/ROADMAP.md).
 
 ## Technology
 
 - Frontend: React, TypeScript, Vite, and Vitest.
-- Backend/scientific package: Python, managed with uv; Pytest and Ruff are development tools.
+- Backend/scientific package: Python, NumPy, Rasterio, Shapely, and h5py; managed with uv, with Pytest and Ruff as development tools.
 - Mapping library: Leaflet is the initial choice for future study-area and parcel layers. It is not installed until map work is approved.
 - API framework: FastAPI is the selected backend direction, deferred until an actual API requirement exists.
 
-The dependency set is intentionally limited to the foundation and its checks. No database, cloud service, or scientific processing library is included yet.
+The dependency set remains limited to the geospatial and HDF5 libraries used by the implemented workflows. No database or application cloud service is included.
 
 ## Prerequisites
 

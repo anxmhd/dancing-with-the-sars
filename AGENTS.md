@@ -6,7 +6,7 @@ Dancing with the SARs is a scientific web application for exploring agricultural
 
 ## Current state
 
-This repository contains the project foundation and shared first-workflow contracts. There are no application features, API routes, verified datasets, or scientific results yet. Read [README.md](README.md), [the architecture](docs/ARCHITECTURE.md), [the domain model](docs/DOMAIN_MODEL.md), [the data contracts](docs/DATA_CONTRACTS.md), [the team contracts](docs/TEAM_CONTRACTS.md), [the integration guidelines](docs/INTEGRATION_GUIDELINES.md), [the data catalog](docs/DATA_CATALOG.md), [the roadmap](docs/ROADMAP.md), and [the status](docs/STATUS.md) before changing the project.
+This repository contains the project foundation and shared first-workflow contracts, a provisional NDVI processor, real Sentinel-2 and Sentinel-1 parcel-window CLI workflows, a local NISAR GCOV HDF5 reader, and inspected Figshare reference data. One real S2 and one real S1 parcel result exist; NISAR data access is blocked on Earthdata authentication, so no NISAR measurement exists. There are no application features or API routes, and none of the initial outputs are scientifically validated. Read [README.md](README.md), [the architecture](docs/ARCHITECTURE.md), [the domain model](docs/DOMAIN_MODEL.md), [the data contracts](docs/DATA_CONTRACTS.md), [the team contracts](docs/TEAM_CONTRACTS.md), [the integration guidelines](docs/INTEGRATION_GUIDELINES.md), [the data catalog](docs/DATA_CATALOG.md), [the Figshare join investigation](docs/FIGSHARE_JOIN_INVESTIGATION.md), [the methodology](docs/METHODOLOGY.md), [the validation approach](docs/VALIDATION.md), [the roadmap](docs/ROADMAP.md), [the first real result](docs/FIRST_REAL_MULTISENSOR_RESULT.md), and [the status](docs/STATUS.md) before changing the project.
 
 ## Scope and data rules
 
@@ -15,6 +15,14 @@ This repository contains the project foundation and shared first-workflow contra
 - Record dataset availability and processing status accurately. Downloaded or processed does not mean scientifically validated.
 - Preserve the distinction between observation, derived indicator, estimate, association, interpretation, and hypothesis. Never state correlation as causation.
 - Do not interpret SAR backscatter as a direct measurement of groundwater depletion. Do not implement forecasting without explicit approval.
+- Scientific credibility is non-negotiable, including under schedule pressure. Reduce the number of parcels, acquisitions, indicators, and sensors before reducing processing, validation, or reporting standards.
+- For each scientific result, preserve the source dataset and exact product, acquisition date and product metadata, units/scaling, preprocessing and quality policy, spatial/temporal resolution, provenance, missingness, uncertainty, and relevant limitations. Do not invent metadata or hide missing values.
+- Distinguish measured observations, derived indicators, estimates, associations, and interpretations. Do not claim that a result is validated when only software correctness, synthetic testing, internal consistency, or comparison has been demonstrated.
+- NDVI is an indirect vegetation indicator. NDVI alone is not evidence of vegetation stress, water stress, irrigation, drought impact, crop health, or groundwater conditions. Describe index changes observationally; any stress interpretation requires additional relevant evidence and explicit uncertainty.
+- SAR backscatter depends on soil moisture, vegetation structure, surface roughness, polarization, incidence angle, wavelength, acquisition geometry, and processing. Do not present backscatter change as a direct measurement of soil moisture or vegetation stress without a justified method.
+- Sentinel-1 C-band and NISAR L-band are complementary, non-interchangeable measurements. Quantitative comparisons must account for wavelength, polarization, date, geometry, resolution, processing level, and measured quantity. If a defensible quantitative comparison is not supported, show observations side by side and explain their complementary information.
+- Consult relevant project literature when making methodological or interpretive decisions. Verify that a cited study's area, sensor, product, scale, and research question apply; a citation is not validation unless the cited evidence supports the specific claim.
+- Prefer fewer, reproducible, validated outputs over broad feature coverage. Where evidence is insufficient, document what cannot be distinguished and stop short of causal or categorical conclusions.
 - Keep raw and large satellite data out of Git. Never commit credentials or local environment files.
 
 ## Architecture boundaries

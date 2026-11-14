@@ -2,7 +2,7 @@
 
 ## Current implementation
 
-The repository is a monorepo with a minimal React/TypeScript frontend and a Python package. The Python package now has a synthetic-tested, per-acquisition Sentinel-2 NDVI processor and series-result assembler in `science/vegetation/`; it has no API, provider adapter, data access, or real-data processing. [The first-workflow contract](DATA_CONTRACTS.md) and [domain model](DOMAIN_MODEL.md) specify shared meanings; they do not imply a complete time-series service.
+The repository is a monorepo with a minimal React/TypeScript frontend and a Python package. The Python package has a synthetic-tested Sentinel-2 NDVI processor and series assembler, public STAC/COG readers for one Sentinel-2 L2A and one Sentinel-1 RTC acquisition, and a local-file NISAR GCOV reader. One real parcel result was processed from each Sentinel-2 and Sentinel-1; NISAR metadata discovery succeeded but HDF5 access requires Earthdata authentication. These are reproducible scientific command-line workflows, not an API or interactive application. See [the first result report](FIRST_REAL_MULTISENSOR_RESULT.md). The [first-workflow contract](DATA_CONTRACTS.md) and [domain model](DOMAIN_MODEL.md) remain the shared semantics and are not changed by these provider-specific outputs.
 
 ## First workflow
 

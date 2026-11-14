@@ -1,6 +1,22 @@
 # Methodology and scientific safeguards
 
-The current scientific code implements a provisional, synthetic-tested per-acquisition NDVI processor. It has not been run against a Sentinel-2 product and is not scientifically validated. See [the processor boundary and unresolved choices](SCIENCE_PROCESSING.md).
+The current scientific code implements a provisional, synthetic-tested per-acquisition NDVI processor. It has now processed one real Sentinel-2 L2A acquisition and one Sentinel-1 RTC acquisition for the same reference parcel. The outputs are initial observations, not independently validated science findings; no NISAR raster was accessible for processing. See [the first result report](FIRST_REAL_MULTISENSOR_RESULT.md) and [processor boundary](SCIENCE_PROCESSING.md).
+
+## Scientific credibility standard
+
+Schedule pressure is handled by reducing scope, not scientific safeguards. Prefer a small number of well-supported results over more features or parcels that cannot be validated. For each result, identify the measured or derived quantity and preserve the exact source dataset/product, acquisition date and product metadata, units and scaling, spatial/temporal resolution, preprocessing and quality filtering, provenance, missing data, uncertainty, and limitations. Do not fill unknown metadata with convenient assumptions or present missing values as zero.
+
+Keep observations, derived indicators, model estimates, statistical associations, interpretations, and hypotheses distinct. Do not claim validation when only implementation, synthetic software tests, internal consistency, or descriptive comparison has been shown. State explicitly what the evidence does and does not establish. If the available evidence cannot distinguish between explanations, describe the ambiguity rather than asserting a cause.
+
+### Interpretation limits
+
+- NDVI is an indirect vegetation indicator. NDVI alone does not prove vegetation stress, water stress, irrigation, drought impact, crop health, or groundwater conditions. Describe an NDVI change as a change in the vegetation index or vegetation dynamics. A pattern may be described as consistent with possible stress only when additional environmental or field evidence is presented and uncertainty is stated.
+- SAR backscatter is affected by soil moisture, vegetation structure, surface roughness, polarization, incidence angle, wavelength, acquisition geometry, and processing. A backscatter change is not a direct measurement of soil moisture or vegetation stress without a justified, validated method.
+- Sentinel-1 C-band and NISAR L-band are complementary sensors, not interchangeable measurements. A quantitative comparison must account for wavelength/frequency, polarization, acquisition date, viewing geometry, spatial resolution, processing level, and measured quantity. Do not calculate or interpret correlation solely because observations share a parcel. When the data do not support a defensible quantitative comparison, present the observations separately and explain what information each contributes.
+
+### Literature use
+
+Consult the available project scientific reference library when a methodological or interpretive decision depends on prior work. Before relying on a paper, verify that its study area, sensor/product, spatial and temporal scale, and research question apply to this workflow. Distinguish published evidence from this project's observations. Do not cite a source as validation for a claim it does not test. These checks do not replace direct validation of project processing and outputs.
 
 ## Current NDVI implementation
 

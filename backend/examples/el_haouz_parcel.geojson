@@ -1,0 +1,25 @@
+{
+  "type": "Feature",
+  "id": "el haouz_Trees_20240110_036",
+  "properties": {
+    "parcel_id": "el haouz_Trees_20240110_036",
+    "reference_source": "Figshare article 28486022 v2, parcel shapefile; survey date 2024-01-10",
+    "source_record_crop_label": "Trees",
+    "source_record_irrigation_label": "Drip Irrigation",
+    "geometry_crs": "EPSG:4326",
+    "attribution": "CC BY 4.0; see https://doi.org/10.6084/m9.figshare.28486022.v2"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-7.701380696897554, 31.661190172143858],
+      [-7.701391619384374, 31.660996944545865],
+      [-7.701823034029748, 31.66145917824606],
+      [-7.701825816516556, 31.66156896431317],
+      [-7.7014998258935625, 31.66182125106122],
+      [-7.701307491784054, 31.661638392732854],
+      [-7.701505209560794, 31.66153124065363],
+      [-7.701380696897554, 31.661190172143858]
+    ]]
+  }
+}

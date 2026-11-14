@@ -1,0 +1,30 @@
+[project]
+name = "dancing-with-the-sars"
+version = "0.1.0"
+description = "Scientific application foundation for Earth observation in Morocco's Haouz plain."
+requires-python = ">=3.11,<3.14"
+dependencies = []
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3,<9",
+  "ruff>=0.14,<0.15",
+]
+
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/dancing_with_sars"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]

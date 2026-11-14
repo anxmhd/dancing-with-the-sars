@@ -2,7 +2,7 @@
 
 ## Current implementation
 
-The repository is a monorepo with a minimal React/TypeScript frontend and a minimal Python package. It has no API, dataset access, geospatial processing, or feature modules. [The first-workflow contract](DATA_CONTRACTS.md) and [domain model](DOMAIN_MODEL.md) specify intended boundaries; they do not mean those components exist.
+The repository is a monorepo with a minimal React/TypeScript frontend and a Python package. The Python package now has a synthetic-tested, per-acquisition Sentinel-2 NDVI processor and series-result assembler in `science/vegetation/`; it has no API, provider adapter, data access, or real-data processing. [The first-workflow contract](DATA_CONTRACTS.md) and [domain model](DOMAIN_MODEL.md) specify shared meanings; they do not imply a complete time-series service.
 
 ## First workflow
 
@@ -18,7 +18,7 @@ The proposed first scientific workflow is to explore one verified agricultural p
 | Scientific processing | Applying the approved quality policy, calculating NDVI, parcel-level valid-pixel aggregation, and processing provenance | Explicit arrays/masks/geometries, domain concepts, focused geospatial libraries | FastAPI, API schemas, frontend code, or hidden downloads |
 | Domain concepts | Stable meanings and relationships shared across application and science | Standard language types and documented semantics | Frameworks, providers, storage schemas, or rendering |
 
-The table describes target responsibilities. The repository currently has only the frontend shell and Python package marker; the API and scientific modules are not implemented.
+The table describes target responsibilities. The repository currently has the frontend shell and the focused scientific processor described in [SCIENCE_PROCESSING.md](SCIENCE_PROCESSING.md); the API, product access, and workflow orchestration are not implemented.
 
 ## Data and dependency flow
 

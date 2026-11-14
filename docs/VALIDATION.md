@@ -2,7 +2,7 @@
 
 ## Foundation checks
 
-The current code has only a frontend identity shell and a Python package version marker. Automated checks verify that these minimal entry points load and render. They do not validate remote sensing methods or scientific conclusions.
+The code has a frontend identity shell, Python package foundation, and a provisional per-acquisition NDVI processor with a series-result assembler. Deterministic tests exercise synthetic raster arrays, SCL alignment/exclusions, nodata, parcel masking/CRS, aggregation, minimum coverage, provenance, and empty/result statuses. They verify software behavior only.
 
 Run checks as described in [the README](../README.md). CI runs Python tests and linting plus frontend type checking, tests, and a production build.
 
@@ -12,6 +12,6 @@ Use deterministic, small fixtures. Add unit, integration, API-contract, and end-
 
 ## Scientific validation
 
-For each approved method, define domain-specific acceptance criteria before claiming validation. Examples include known-value checks for indices and unit conversions; CRS and spatial-intersection checks; nodata/cloud-mask behavior; temporal aggregation; and comparison against independent reference information where available.
+The supplied Figshare parcel and NDVI archives were inspected for file structure and metadata, not integrated or processed by the application. The Sentinel-2 processor has not consumed a real Sentinel-2 scene or been compared with an independent implementation. Before marking it scientifically validated, select a documented product and QA/aggregation policy, obtain an explicitly approved representative product sample, and compare parcel masks and index values against an independent trusted reference with stated tolerances. Also verify any join from provided NDVI CSVs to parcel identifiers before using them as reference values.
 
 Track software state separately: `IMPLEMENTED`, `TESTED`, and `VALIDATED` mean different things. A passing software suite alone does not validate scientific methods or findings.

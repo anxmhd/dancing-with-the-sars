@@ -59,6 +59,7 @@ From `frontend/`, `npm run check` runs TypeScript checking and Vitest; `npm run 
 - [Integration guidelines](docs/INTEGRATION_GUIDELINES.md)
 - [Dataset roadmap and status](docs/DATA_CATALOG.md)
 - [Methods and scientific safeguards](docs/METHODOLOGY.md)
+- [Scientific processing interface](docs/SCIENCE_PROCESSING.md)
 - [Software and scientific validation](docs/VALIDATION.md)
 - [Contribution workflow](docs/CONTRIBUTING.md)
 - [Roadmap](docs/ROADMAP.md)

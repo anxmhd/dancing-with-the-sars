@@ -33,11 +33,15 @@ export function useParcelObservations(
     setLoading(true);
     setError(null);
 
-    fetchParcelObservations(parcelId, {
-      startDate,
-      endDate,
-      missions: missionsKey.split(",") as ObservationQuery["missions"],
-    })
+    fetchParcelObservations(
+      parcelId,
+      {
+        startDate,
+        endDate,
+        missions: missionsKey.split(",") as ObservationQuery["missions"],
+      },
+      controller.signal,
+    )
       .then((result) => {
         if (controller.signal.aborted) return;
         setData(result);

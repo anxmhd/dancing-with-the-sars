@@ -8,6 +8,7 @@ export function fetchParcel(parcelId: string): Promise<ParcelFeature> {
 export function fetchParcelObservations(
   parcelId: string,
   query: ObservationQuery,
+  signal?: AbortSignal,
 ): Promise<MultisensorResponse> {
   const params = new URLSearchParams();
   params.set("startDate", query.startDate);
@@ -17,6 +18,7 @@ export function fetchParcelObservations(
   }
   return apiRequest<MultisensorResponse>(
     `/v1/parcels/${encodeURIComponent(parcelId)}/observations?${params.toString()}`,
+    signal ? { signal } : undefined,
   );
 }
 

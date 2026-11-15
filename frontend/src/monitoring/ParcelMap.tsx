@@ -107,7 +107,9 @@ export function ParcelMap({ parcels, selectedParcelId, onSelectParcel, emptyMess
     }
   }, [parcels, selectedParcelId, onSelectParcel]);
 
-  if (parcels.length === 0) {
+  const hasGeometry = parcels.some((parcel) => Boolean(parcel.geometry));
+
+  if (parcels.length === 0 || !hasGeometry) {
     return (
       <div className="map-empty-state" role="status">
         {emptyMessage ?? "No source-backed parcel geometries are available."}
@@ -115,5 +117,13 @@ export function ParcelMap({ parcels, selectedParcelId, onSelectParcel, emptyMess
     );
   }
 
-  return <div ref={containerRef} className="parcel-leaflet-map" aria-label="Parcel map" />;
+  return (
+    <>
+      <div ref={containerRef} className="parcel-leaflet-map" aria-label="Parcel map" />
+      <div className="parcel-map-legend" aria-label="Parcel map legend">
+        <span><i className="legend-available" /> Source-backed parcel geometry</span>
+        <span><i className="legend-selected" /> Selected parcel</span>
+      </div>
+    </>
+  );
 }

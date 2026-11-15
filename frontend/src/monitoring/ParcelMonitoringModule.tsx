@@ -42,9 +42,19 @@ export function ParcelMonitoringModule() {
     };
   }, []);
 
+  function queriesEqual(left: ObservationQuery | null, right: ObservationQuery): boolean {
+    if (!left) return false;
+    return (
+      left.startDate === right.startDate &&
+      left.endDate === right.endDate &&
+      left.missions.length === right.missions.length &&
+      left.missions.every((mission) => right.missions.includes(mission))
+    );
+  }
+
   function handleApply(query: ObservationQuery) {
     if (!selectedParcelId) return;
-    setAppliedQuery(query);
+    setAppliedQuery((current) => (queriesEqual(current, query) ? current : query));
   }
 
   return (

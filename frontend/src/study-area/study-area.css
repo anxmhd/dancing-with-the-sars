@@ -91,3 +91,34 @@ button { cursor: pointer; }
 .provenance-section summary { cursor: pointer; color: #46694f; font-size: 10px; font-weight: 600; }
 .provenance-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 12px; margin-top: 8px; font-size: 9px; color: #405247; }
 @media (max-width: 900px) { .query-grid { grid-template-columns: 1fr; } .provenance-grid { grid-template-columns: 1fr; } }
+
+.parcel-map-legend {
+  display: flex;
+  gap: 14px;
+  margin-top: 8px;
+  font-size: 10px;
+  color: #526055;
+}
+
+.parcel-map-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.parcel-map-legend i {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.legend-available {
+  background: #728c66;
+  opacity: 0.7;
+}
+
+.legend-selected {
+  background: #1f3b73;
+  opacity: 0.8;
+}

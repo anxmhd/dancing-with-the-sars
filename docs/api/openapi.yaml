@@ -1,0 +1,435 @@
+openapi: 3.1.0
+info:
+  title: Dancing with the SARs API
+  description: 'Backend API for the Dancing with the SARs first workflow: retrieving
+    one
+
+    agricultural parcel''s seasonal Sentinel-2 NDVI observations.
+
+
+    The API serializes results according to `docs/DATA_CONTRACTS.md` and the
+
+    committed OpenAPI document at `docs/api/openapi.yaml`. That document is proposed
+
+    for frontend and scientific review and is not frozen until both owners confirm
+
+    it can be consumed and produced.
+
+
+    Development currently runs against a deterministic mock scientific provider.
+
+    Its values, identifiers, and dates are synthetic test data, not satellite
+
+    observations or Haouz measurements. No endpoint here establishes scientific
+
+    validity.'
+  version: 0.1.0
+paths:
+  /api/v1/health:
+    get:
+      tags:
+      - system
+      summary: Report backend service status
+      description: 'Report liveness and the configured science provider.
+
+
+        This endpoint does not check external data sources or scientific validity.'
+      operationId: getHealth
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /api/v1/parcels/{parcelId}/vegetation-series:
+    get:
+      tags:
+      - vegetation
+      summary: Retrieve a parcel's seasonal NDVI observations
+      description: 'Return candidate NDVI observations for one parcel and inclusive
+        date range.
+
+
+        Missing acquisitions are absent from ``observations`` and are never replaced
+
+        with zeros. Excluded or unassessed candidates keep ``value: null`` and their
+
+        quality state. A valid empty result is a 200 response with the corresponding
+
+        ``resultStatus``, not an error.'
+      operationId: getParcelVegetationSeries
+      parameters:
+      - name: parcelId
+        in: path
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 200
+          description: Internal parcel identifier from the parcel feature collection.
+          title: Parcelid
+        description: Internal parcel identifier from the parcel feature collection.
+      - name: startDate
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+          description: Inclusive first requested calendar date (YYYY-MM-DD).
+          title: Startdate
+        description: Inclusive first requested calendar date (YYYY-MM-DD).
+      - name: endDate
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+          description: Inclusive last requested calendar date (YYYY-MM-DD).
+          title: Enddate
+        description: Inclusive last requested calendar date (YYYY-MM-DD).
+      - name: index
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Requested derived index. The first workflow supports NDVI only.
+          enum:
+          - NDVI
+          title: Index
+        description: Requested derived index. The first workflow supports NDVI only.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VegetationSeriesResponse'
+        '404':
+          description: Unknown internal parcel identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Invalid request or invalid date range/unsupported index.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal processing failure.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Scientific data source unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ApiIndex:
+      type: string
+      enum:
+      - NDVI
+      title: ApiIndex
+    ApiQualityStatus:
+      type: string
+      enum:
+      - accepted
+      - excluded
+      - unknown
+      title: ApiQualityStatus
+    ApiResultStatus:
+      type: string
+      enum:
+      - available
+      - noObservations
+      - noValidObservations
+      title: ApiResultStatus
+    DataProvenanceResponse:
+      properties:
+        provider:
+          type: string
+          title: Provider
+          description: Source/provider name.
+        datasetName:
+          type: string
+          title: Datasetname
+          description: Human-readable dataset/collection name.
+        externalDatasetId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Externaldatasetid
+          description: Provider collection identifier when known; otherwise null.
+        externalProductIds:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Externalproductids
+          description: Provider product identifiers actually used; null when not available.
+        externalAcquisitionIds:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Externalacquisitionids
+          description: Provider acquisition identifiers when supplied; null when not
+            available.
+        productVersion:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Productversion
+          description: Product version or processing level.
+        processingSoftware:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Processingsoftware
+          description: Processing implementation and version.
+        processingMethod:
+          type: string
+          title: Processingmethod
+          description: Stable method name/version or reference.
+        processingParameters:
+          additionalProperties: true
+          type: object
+          title: Processingparameters
+          description: Parameters that affect the result; empty only when none apply.
+        processedAt:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Processedat
+          description: Time the result was generated, if recorded.
+      type: object
+      required:
+      - provider
+      - datasetName
+      - externalDatasetId
+      - externalProductIds
+      - externalAcquisitionIds
+      - productVersion
+      - processingSoftware
+      - processingMethod
+      - processingParameters
+      - processedAt
+      title: DataProvenanceResponse
+    DataQualityResponse:
+      properties:
+        status:
+          $ref: '#/components/schemas/ApiQualityStatus'
+          description: Parcel-level quality outcome for this result, not a general
+            sensor rating.
+        flags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Flags
+          description: Preserved or documented QA flags. null means unavailable/unknown;
+            [] means flags were assessed and none apply.
+        reasons:
+          items:
+            type: string
+          type: array
+          title: Reasons
+          description: Explanation codes or text for exclusion or unknown status.
+        validPixelCount:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Validpixelcount
+          description: Pixels included by the approved aggregation, if meaningful
+            and available.
+        totalPixelCount:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Totalpixelcount
+          description: Candidate pixels in the parcel for this acquisition, if meaningful.
+      type: object
+      required:
+      - status
+      - flags
+      - reasons
+      title: DataQualityResponse
+    ErrorDetailResponse:
+      properties:
+        fieldPath:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Fieldpath
+          description: Input field related to the detail, if applicable.
+        code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Code
+          description: Stable machine-readable detail code, if available.
+        message:
+          type: string
+          title: Message
+          description: Human-readable explanation of this detail.
+      type: object
+      required:
+      - fieldPath
+      - code
+      - message
+      title: ErrorDetailResponse
+    ErrorResponse:
+      properties:
+        code:
+          type: string
+          title: Code
+          description: Stable machine-readable error code.
+        message:
+          type: string
+          title: Message
+          description: Safe, user-readable summary.
+        details:
+          items:
+            $ref: '#/components/schemas/ErrorDetailResponse'
+          type: array
+          title: Details
+          description: Field-level or source-specific details; empty if none.
+      type: object
+      required:
+      - code
+      - message
+      - details
+      title: ErrorResponse
+    HealthResponse:
+      properties:
+        status:
+          type: string
+          const: ok
+          title: Status
+          description: Service availability.
+        service:
+          type: string
+          title: Service
+          description: Service identifier.
+        version:
+          type: string
+          title: Version
+          description: Backend package version.
+        scienceProvider:
+          type: string
+          title: Scienceprovider
+          description: Science provider currently wired behind the application/science
+            interface.
+      type: object
+      required:
+      - status
+      - service
+      - version
+      - scienceProvider
+      title: HealthResponse
+    VegetationObservationResponse:
+      properties:
+        observationId:
+          type: string
+          title: Observationid
+          description: Opaque internal result identifier.
+        acquisitionId:
+          type: string
+          title: Acquisitionid
+          description: Internal reference to the acquisition candidate.
+        acquiredAt:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Acquiredat
+          description: Acquisition time when source metadata supplies it; otherwise
+            null.
+        observationDate:
+          type: string
+          format: date
+          title: Observationdate
+          description: Source acquisition calendar date used to order and label the
+            series.
+        value:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Value
+          description: Parcel-level NDVI only when quality status is 'accepted'; otherwise
+            null.
+        quality:
+          $ref: '#/components/schemas/DataQualityResponse'
+          description: Quality state for this parcel result.
+      type: object
+      required:
+      - observationId
+      - acquisitionId
+      - acquiredAt
+      - observationDate
+      - value
+      - quality
+      title: VegetationObservationResponse
+    VegetationSeriesResponse:
+      properties:
+        parcelId:
+          type: string
+          title: Parcelid
+          description: Internal selected parcel identifier.
+        index:
+          $ref: '#/components/schemas/ApiIndex'
+          description: Indicator returned; initially NDVI.
+        unit:
+          type: string
+          const: '1'
+          title: Unit
+          description: Unit for every value in this response. NDVI is dimensionless;
+            '1'.
+        startDate:
+          type: string
+          format: date
+          title: Startdate
+          description: Inclusive range start echoed from the request.
+        endDate:
+          type: string
+          format: date
+          title: Enddate
+          description: Inclusive range end echoed from the request.
+        resultStatus:
+          $ref: '#/components/schemas/ApiResultStatus'
+          description: available when at least one accepted value exists, noObservations
+            when no candidate acquisition exists in range, noValidObservations when
+            candidates exist but none was accepted.
+        observations:
+          items:
+            $ref: '#/components/schemas/VegetationObservationResponse'
+          type: array
+          title: Observations
+          description: Candidate acquisition results in chronological order; empty
+            when none exist.
+        provenance:
+          $ref: '#/components/schemas/DataProvenanceResponse'
+          description: Source and processing lineage applicable to this response.
+      type: object
+      required:
+      - parcelId
+      - index
+      - unit
+      - startDate
+      - endDate
+      - resultStatus
+      - observations
+      - provenance
+      title: VegetationSeriesResponse

@@ -2,7 +2,7 @@
 
 ## Current implementation
 
-The repository is a monorepo with a minimal React/TypeScript frontend and a minimal Python package. It has no API, dataset access, geospatial processing, or feature modules. [The first-workflow contract](DATA_CONTRACTS.md) and [domain model](DOMAIN_MODEL.md) specify intended boundaries; they do not mean those components exist.
+The repository is a monorepo with a minimal React/TypeScript frontend and a Python backend. The backend now contains a FastAPI API layer, an application layer (validation, orchestration, explicit serialization), shared domain value types, and a deterministic synthetic scientific provider behind the application-to-science interface. It has no dataset access, geospatial processing, real scientific module, or database. [The first-workflow contract](DATA_CONTRACTS.md) and [domain model](DOMAIN_MODEL.md) specify intended boundaries; the API is the only implemented consumer so far. `docs/api/openapi.yaml` is the proposed machine-readable HTTP contract.
 
 ## First workflow
 
@@ -18,7 +18,7 @@ The proposed first scientific workflow is to explore one verified agricultural p
 | Scientific processing | Applying the approved quality policy, calculating NDVI, parcel-level valid-pixel aggregation, and processing provenance | Explicit arrays/masks/geometries, domain concepts, focused geospatial libraries | FastAPI, API schemas, frontend code, or hidden downloads |
 | Domain concepts | Stable meanings and relationships shared across application and science | Standard language types and documented semantics | Frameworks, providers, storage schemas, or rendering |
 
-The table describes target responsibilities. The repository currently has only the frontend shell and Python package marker; the API and scientific modules are not implemented.
+The table describes target responsibilities. The API and application layers exist; the scientific data-access and processing modules do not. Until they do, the application is wired to a mock provider that performs no science.
 
 ## Data and dependency flow
 
@@ -49,7 +49,7 @@ Permitted code dependencies are one-way: backend application/API code may call t
 
 ## API and module timing
 
-FastAPI remains the selected framework when a concrete API is approved. Do not add routes or create empty API/domain/science/data directories in advance. Use [DATA_CONTRACTS.md](DATA_CONTRACTS.md) as the current semantic contract. Before parallel API implementation, choose a single machine-readable contract artifact (likely OpenAPI for HTTP) and derive or validate consumer types and fixtures from it. No endpoint paths are fixed here.
+FastAPI is the selected framework and now serves the approved first workflow. Keep `docs/api/openapi.yaml` as the single machine-readable HTTP contract and derive or validate consumer types and fixtures from it rather than maintaining copies. No endpoint paths are fixed in this document; see the OpenAPI artifact. Do not create empty `science/` or `data/` modules in advance; the application-to-science interface is defined in `backend/src/dancing_with_sars/application/science_contract.py` and is awaiting scientific-owner review.
 
 ## Data flow and storage
 

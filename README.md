@@ -4,14 +4,14 @@ Monitoring agricultural dynamics and climate-related vegetation stress in Morocc
 
 ## Project status
 
-The repository currently contains the approved development foundation only. No application features, API endpoints, scientific datasets, or validated findings have been implemented. See [project status](docs/STATUS.md) and [the roadmap](docs/ROADMAP.md).
+The repository contains the approved development foundation and a backend API foundation for the first workflow. The API currently serves deterministic synthetic data from a mock scientific provider; no real satellite datasets, scientific processing, or validated findings have been implemented. See [project status](docs/STATUS.md) and [the roadmap](docs/ROADMAP.md).
 
 ## Technology
 
 - Frontend: React, TypeScript, Vite, and Vitest.
 - Backend/scientific package: Python, managed with uv; Pytest and Ruff are development tools.
 - Mapping library: Leaflet is the initial choice for future study-area and parcel layers. It is not installed until map work is approved.
-- API framework: FastAPI is the selected backend direction, deferred until an actual API requirement exists.
+- API framework: FastAPI, implemented for the first workflow with a mock scientific provider until the scientific layer is available.
 
 The dependency set is intentionally limited to the foundation and its checks. No database, cloud service, or scientific processing library is included yet.
 
@@ -42,7 +42,9 @@ npm ci
 npm run dev
 ```
 
-The frontend currently renders a small project identity shell only. It has no map, data, or analytical features.
+The backend API can be run from `backend/` with `uv run uvicorn --factory dancing_with_sars.main:create_app --reload`; see [the backend guide](backend/README.md) and [the proposed OpenAPI contract](docs/api/openapi.yaml).
+
+The frontend currently renders a small project identity shell only. It has no map, data, or analytical features and is not yet connected to the API.
 
 ## Checks
 

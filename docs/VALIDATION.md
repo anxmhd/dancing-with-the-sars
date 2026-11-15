@@ -2,7 +2,7 @@
 
 ## Foundation checks
 
-The current code has only a frontend identity shell and a Python package version marker. Automated checks verify that these minimal entry points load and render. They do not validate remote sensing methods or scientific conclusions.
+The current code has a frontend identity shell and a backend API foundation. Automated checks verify application startup, endpoint behavior, request validation, error responses, empty states, mock-provider integration, and OpenAPI/application consistency against synthetic fixtures. They do not validate remote sensing methods or scientific conclusions.
 
 Run checks as described in [the README](../README.md). CI runs Python tests and linting plus frontend type checking, tests, and a production build.
 

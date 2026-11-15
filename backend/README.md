@@ -1,12 +1,13 @@
 # Backend
 
-FastAPI application for the first project workflow: retrieving one agricultural
-parcel's seasonal Sentinel-2 NDVI observations.
+FastAPI application for Dancing with the SARs: parcel discovery and
+multisensor observations (Sentinel-2, Sentinel-1, NISAR).
 
-**Status:** application foundation implemented and software-tested against a
-synthetic provider. No real satellite data, scientific processing, or
-scientifically validated result exists in this repository. The committed
-OpenAPI document is proposed for team review; it is not frozen.
+**Status:** backend API implemented and software-tested against the shared
+multisensor contract and fixtures. Parcel geometry comes from
+`backend/examples/el_haouz_parcel.geojson`; observations are sourced from the
+shared fixtures and contract. The committed OpenAPI document is generated from
+the application.
 
 ## Layout
 
@@ -32,49 +33,34 @@ contract; `docs/api/openapi.yaml` is the single machine-readable HTTP artifact.
 
 ## Endpoints
 
-Both endpoints are under `/api/v1`.
+All endpoints are under `/api/v1`.
 
 | Method | Path | Purpose |
 |---|---|---|
-| `GET` | `/health` | Liveness, service version, and the configured science provider. |
-| `GET` | `/parcels/{parcelId}/vegetation-series?startDate=&endDate=&index=` | Candidate NDVI observations for one parcel and inclusive date range. |
+| `GET` | `/health` | Liveness and service version. |
+| `GET` | `/parcels/{parcelId}` | Source-backed parcel as a GeoJSON Feature. |
+| `GET` | `/parcels/{parcelId}/observations?startDate=&endDate=&missions=` | Canonical multisensor response. |
 
-`index` currently accepts only `NDVI`. Dates use `YYYY-MM-DD`. The response
-follows the camelCase contract in `docs/DATA_CONTRACTS.md`.
+`missions` is repeatable and accepts `Sentinel-2`, `Sentinel-1`, `NISAR`
+(defaults to all three). Dates use `YYYY-MM-DD`. The response follows
+`contracts/multisensor-response.schema.json`.
 
-Empty states are successful `200` responses:
-
-- `noObservations`: no candidate acquisition exists in the range.
-- `noValidObservations`: candidates exist, but none was accepted.
-
-Missing acquisitions are absent from `observations`. Excluded or unassessed
-candidates remain present with `value: null` and their quality state. A missing
-value is never rendered as zero.
+Sensor statuses: `available`, `noObservations`, `noValidObservations`,
+`unavailable`. NISAR rejected pixels remain `null`.
 
 ### Error envelope
 
-Every failure returns the documented envelope:
+Every failure returns:
 
 ```json
-{
-  "code": "INVALID_DATE_RANGE",
-  "message": "The end date must not precede the start date.",
-  "details": [
-    {"fieldPath": "endDate", "code": "DATE_ORDER", "message": "End date precedes start date."}
-  ]
-}
+{ "error": { "code": "invalidRequest|parcelNotFound|internalError", "message": "...", "requestId": null } }
 ```
 
 | Code | HTTP | Meaning |
 |---|---:|---|
-| `INVALID_REQUEST` | 422 | Missing, malformed, or otherwise invalid request parameter. |
-| `INVALID_DATE_RANGE` | 422 | `endDate` precedes `startDate`. |
-| `UNSUPPORTED_INDEX` | 422 | Index other than `NDVI`. |
-| `PARCEL_NOT_FOUND` | 404 | Unknown internal parcel identifier. |
-| `SOURCE_UNAVAILABLE` | 503 | Scientific data source could not be reached. |
-| `PROCESSING_FAILED` | 500 | Science processing failed or returned a contract-invalid result. |
-| `INTERNAL_ERROR` | 500 | Unexpected backend failure (safe message, no internals). |
-| `NOT_FOUND` / `METHOD_NOT_ALLOWED` | 404 / 405 | Unknown route or method. |
+| `invalidRequest` | 400 | Missing, malformed, or otherwise invalid request. |
+| `parcelNotFound` | 404 | Unknown parcel identifier. |
+| `internalError` | 500 | Unexpected backend failure. |
 
 ## Mock scientific provider
 
@@ -115,7 +101,7 @@ Then open:
 Example request:
 
 ```powershell
-curl "http://127.0.0.1:8000/api/v1/parcels/synthetic-parcel-001/vegetation-series?startDate=2025-01-01&endDate=2025-03-31&index=NDVI"
+curl "http://127.0.0.1:8000/api/v1/parcels/el%20haouz_Trees_20240110_036/observations?startDate=2026-10-01&endDate=2026-11-30&missions=Sentinel-1&missions=Sentinel-2"
 ```
 
 ## Test and check
@@ -130,8 +116,7 @@ uv run ruff check .
 
 Tests use synthetic fixtures only and require no external services. The contract
 test compares the application's generated OpenAPI document with the committed
-`docs/api/openapi.yaml` and the shared fixture at
-`../tests/fixtures/vegetation-series.synthetic.json`.
+`docs/api/openapi.yaml`.
 
 Regenerate the OpenAPI document after changing routes or schemas:
 

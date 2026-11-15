@@ -42,6 +42,12 @@ This repository contains the foundation, scientific workflows, actual Sentinel-2
 - Use Conventional Commit messages when committing, for example `docs: establish project foundation`. Do not commit unless asked.
 - Update documentation when actual architecture, setup, interfaces, methods, tests, or status change.
 
+## Frontend UI toolkit guidance
+
+- The frontend foundation does not currently include Tailwind CSS or daisyUI. Do not add either as part of unrelated work; add them only for an approved UI task with a concrete need.
+- When a task uses daisyUI, follow the workspace skill at [`.agents/skills/daisyui/SKILL.md`](.agents/skills/daisyui/SKILL.md) and verify setup against the official documentation linked there.
+- Keep scientific meaning and uncertainty clear in the interface. daisyUI components are presentation tools and must not imply stronger evidence than the underlying data supports.
+
 ## Local checks
 
 Backend (from `backend/`):

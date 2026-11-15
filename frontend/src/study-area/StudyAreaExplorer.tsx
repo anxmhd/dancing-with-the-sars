@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent } 
 import { Link } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
 import { SYNTHETIC_AREAS } from "./synthetic-areas";
+import { ParcelObservationPanel } from "./ParcelObservationPanel";
 import type { StudyArea } from "./synthetic-areas";
 import "./study-area.css";
 
@@ -168,7 +169,9 @@ export function StudyAreaExplorer() {
             </aside>
           </section>
 
-          <footer className="page-footer"><span>Data status: no verified parcel boundaries or observations are connected.</span><span>Project workspace <b>·</b> v0.1</span></footer>
+          <ParcelObservationPanel />
+
+          <footer className="page-footer"><span>Data status: synthetic areas plus connected parcel observations where available.</span><span>Project workspace <b>·</b> v0.1</span></footer>
         </div>
       </section>
     </main>

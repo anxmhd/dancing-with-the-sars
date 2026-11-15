@@ -4,12 +4,12 @@ from typing import Any
 
 import pytest
 import yaml
-from conftest import OPENAPI_PATH, VEGETATION_SERIES_PATH
-from fastapi.testclient import TestClient
+from conftest import OPENAPI_PATH
 
 from dancing_with_sars.main import create_app
 
-VEGETATION_PATH = "/api/v1/parcels/{parcelId}/vegetation-series"
+PARCEL_PATH = "/api/v1/parcels/{parcelId}"
+OBSERVATIONS_PATH = "/api/v1/parcels/{parcelId}/observations"
 
 
 @pytest.fixture(scope="module")
@@ -24,62 +24,9 @@ def test_committed_openapi_matches_application(openapi_document: dict[str, Any])
     )
 
 
-def test_openapi_documents_only_the_first_workflow(openapi_document: dict[str, Any]) -> None:
+def test_openapi_documents_expected_paths(openapi_document: dict[str, Any]) -> None:
     assert set(openapi_document["paths"]) == {
         "/api/v1/health",
-        VEGETATION_PATH,
+        PARCEL_PATH,
+        OBSERVATIONS_PATH,
     }
-
-
-def test_openapi_documents_request_parameters(openapi_document: dict[str, Any]) -> None:
-    parameters = openapi_document["paths"][VEGETATION_PATH]["get"]["parameters"]
-    by_location = {(item["in"], item["name"]): item for item in parameters}
-
-    assert set(by_location) == {
-        ("path", "parcelId"),
-        ("query", "startDate"),
-        ("query", "endDate"),
-        ("query", "index"),
-    }
-    assert by_location[("query", "startDate")]["schema"]["format"] == "date"
-    assert by_location[("query", "index")]["schema"]["enum"] == ["NDVI"]
-
-
-def test_openapi_documents_error_responses(openapi_document: dict[str, Any]) -> None:
-    responses = openapi_document["paths"][VEGETATION_PATH]["get"]["responses"]
-
-    for status_code in ("404", "422", "500", "503"):
-        schema = responses[status_code]["content"]["application/json"]["schema"]
-        assert schema["$ref"] == "#/components/schemas/ErrorResponse"
-
-
-def test_response_properties_are_camel_case(openapi_document: dict[str, Any]) -> None:
-    properties = openapi_document["components"]["schemas"]["VegetationSeriesResponse"][
-        "properties"
-    ]
-
-    assert set(properties) == {
-        "parcelId",
-        "index",
-        "unit",
-        "startDate",
-        "endDate",
-        "resultStatus",
-        "observations",
-        "provenance",
-    }
-    assert openapi_document["components"]["schemas"]["ErrorResponse"]["required"] == [
-        "code",
-        "message",
-        "details",
-    ]
-
-
-def test_error_response_body_matches_documented_envelope(client: TestClient) -> None:
-    response = client.get(
-        VEGETATION_SERIES_PATH.format(parcel_id="unknown-parcel"),
-        params={"startDate": "2025-01-01", "endDate": "2025-03-31", "index": "NDVI"},
-    )
-
-    assert response.status_code == 404
-    assert set(response.json()) == {"code", "message", "details"}

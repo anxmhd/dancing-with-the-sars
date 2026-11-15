@@ -22,7 +22,8 @@ def test_application_starts_with_configured_providers() -> None:
     )
     assert set(app.openapi()["paths"]) == {
         "/api/v1/health",
-        "/api/v1/parcels/{parcelId}/vegetation-series",
+        "/api/v1/parcels/{parcelId}",
+        "/api/v1/parcels/{parcelId}/observations",
     }
 
 

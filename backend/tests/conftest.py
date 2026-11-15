@@ -14,11 +14,12 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 OPENAPI_PATH = REPOSITORY_ROOT / "docs" / "api" / "openapi.yaml"
 SHARED_FIXTURE_PATH = REPOSITORY_ROOT / "tests" / "fixtures" / "vegetation-series.synthetic.json"
 
-VEGETATION_SERIES_PATH = "/api/v1/parcels/{parcel_id}/vegetation-series"
-DEFAULT_QUERY = {
-    "startDate": "2025-01-01",
-    "endDate": "2025-03-31",
-    "index": "NDVI",
+PARCEL_PATH = "/api/v1/parcels/{parcel_id}"
+OBSERVATIONS_PATH = "/api/v1/parcels/{parcel_id}/observations"
+DEFAULT_OBSERVATIONS_QUERY = {
+    "startDate": "2026-10-01",
+    "endDate": "2026-11-30",
+    "missions": ["Sentinel-1", "Sentinel-2"],
 }
 
 

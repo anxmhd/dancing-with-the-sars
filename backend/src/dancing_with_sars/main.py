@@ -2,46 +2,27 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from fastapi import FastAPI
 
 from dancing_with_sars.api.errors import register_error_handlers
 from dancing_with_sars.api.routes import api_v1_router
 from dancing_with_sars.application.providers import build_science_providers
-from dancing_with_sars.application.science_contract import (
-    ParcelCatalog,
-    VegetationScienceGateway,
-)
-from dancing_with_sars.application.service import VegetationSeriesService
+from dancing_with_sars.application.service import ObservationService
 from dancing_with_sars.config import Settings
 
 API_DESCRIPTION = """
-Backend API for the Dancing with the SARs first workflow: retrieving one
-agricultural parcel's seasonal Sentinel-2 NDVI observations.
-
-The API serializes results according to `docs/DATA_CONTRACTS.md` and the
-committed OpenAPI document at `docs/api/openapi.yaml`. That document is proposed
-for frontend and scientific review and is not frozen until both owners confirm
-it can be consumed and produced.
-
-Development currently runs against a deterministic mock scientific provider.
-Its values, identifiers, and dates are synthetic test data, not satellite
-observations or Haouz measurements. No endpoint here establishes scientific
-validity.
+Backend API for Dancing with the SARs: parcel discovery and multisensor observations.
 """.strip()
 
 
 def create_app(
     settings: Settings | None = None,
     *,
-    parcel_catalog: ParcelCatalog | None = None,
-    science_gateway: VegetationScienceGateway | None = None,
+    parcel_catalog: Any = None,
+    science_gateway: Any = None,
 ) -> FastAPI:
-    """Build the application, wiring the configured providers and services.
-
-    ``parcel_catalog`` and ``science_gateway`` override the configured providers
-    for tests; production startup uses the provider selected by ``Settings``.
-    """
-
     resolved_settings = settings or Settings.from_environment()
     default_catalog, default_gateway = build_science_providers(resolved_settings)
 
@@ -54,10 +35,14 @@ def create_app(
         redoc_url=None,
     )
     app.state.settings = resolved_settings
-    app.state.vegetation_series_service = VegetationSeriesService(
-        parcel_catalog=parcel_catalog or default_catalog,
-        science=science_gateway or default_gateway,
+    catalog = parcel_catalog or default_catalog
+    gateway = science_gateway if science_gateway is not None else default_gateway
+    app.state.observation_service = ObservationService(
+        parcel_catalog=catalog,
+        science=gateway,
     )
+    # Backwards-compatible alias
+    app.state.vegetation_series_service = app.state.observation_service
 
     register_error_handlers(app)
     app.include_router(api_v1_router)

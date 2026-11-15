@@ -40,6 +40,12 @@ class InvalidDateRangeError(ApplicationError):
     code = "INVALID_DATE_RANGE"
 
 
+class InvalidRequestError(ApplicationError):
+    """The request is invalid."""
+
+    code = "INVALID_REQUEST"
+
+
 class UnsupportedIndexError(ApplicationError):
     """The requested derived index is not supported by the first workflow."""
 

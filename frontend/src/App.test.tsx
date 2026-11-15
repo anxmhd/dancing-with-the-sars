@@ -1,5 +1,6 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { MemoryRouter } from "react-router-dom";
 import availableFixture from "../../contracts/fixtures/sentinel1-sentinel2-available.json";
 import emptyFixture from "../../contracts/fixtures/no-observations.json";
 import nisarFixture from "../../contracts/fixtures/nisar-quality-excluded.json";
@@ -17,10 +18,17 @@ afterEach(() => vi.unstubAllGlobals());
 
 describe("parcel observatory", () => {
   it("renders the application identity and source-backed parcel workflow", () => {
-    const markup = renderToStaticMarkup(<App />);
+    const markup = renderToStaticMarkup(<MemoryRouter><App /></MemoryRouter>);
     expect(markup).toContain("Dancing with the SARs");
     expect(markup).toContain("Selected parcel");
     expect(markup).toContain("Update view");
+  });
+
+  it("keeps the research dashboard and adds the community report feed", () => {
+    const markup = renderToStaticMarkup(<MemoryRouter initialEntries={["/tickets"]}><App /></MemoryRouter>);
+    expect(markup).toContain("Environmental Observations");
+    expect(markup).toContain("Share a report");
+    expect(markup).toContain("Community observations");
   });
 
   it("loads the shared real-result fixture through the API client", async () => {

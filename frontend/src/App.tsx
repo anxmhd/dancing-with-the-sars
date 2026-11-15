@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link, Navigate, Route, Routes } from "react-router-dom";
 import { fetchObservations, fetchParcels } from "./api";
 import { ParcelMap } from "./ParcelMap";
 import { ChartPanel, type ChartPoint } from "./charts";
@@ -10,6 +11,10 @@ import type {
   ParcelFeatureCollection,
   SensorResult,
 } from "./types";
+import { TicketDetailPage } from "./ticketing/TicketDetailPage";
+import { TicketListPage } from "./ticketing/TicketListPage";
+import { TicketingLayout } from "./ticketing/TicketingLayout";
+import { NewTicketPage } from "./ticketing/NewTicketPage";
 
 const DEFAULT_START = "2026-08-14";
 const DEFAULT_END = "2026-11-06";
@@ -151,7 +156,7 @@ function latestPoint(points: ChartPoint[]): ChartPoint | null {
   return [...points].sort((a, b) => a.observation.observationDate.localeCompare(b.observation.observationDate)).at(-1) ?? null;
 }
 
-export function App() {
+function ResearchDashboard() {
   const [parcels, setParcels] = useState<ParcelFeatureCollection | null>(null);
   const [parcelError, setParcelError] = useState<string | null>(null);
   const [selectedParcelId, setSelectedParcelId] = useState("");
@@ -274,6 +279,10 @@ export function App() {
           <span className="brand-mark" aria-hidden="true">D/S</span>
           <span><strong>Dancing with the SARs</strong><small>Earth observation · Haouz, Morocco</small></span>
         </a>
+        <nav className="app-nav" aria-label="Main navigation">
+          <Link to="/" aria-current="page">Study area</Link>
+          <Link to="/tickets">Community reports</Link>
+        </nav>
         <div className="topbar-note"><span className="live-indicator" /> Local research demo <span className="divider">/</span> v1</div>
       </header>
 
@@ -379,5 +388,19 @@ export function App() {
 
       <footer className="footer"><span>Dancing with the SARs <span className="footer-separator">·</span> Research prototype</span><span>Provenance and quality are shown with each observation.</span></footer>
     </div>
+  );
+}
+
+export function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<ResearchDashboard />} />
+      <Route path="/tickets" element={<TicketingLayout />}>
+        <Route index element={<TicketListPage />} />
+        <Route path="new" element={<NewTicketPage />} />
+        <Route path=":ticketId" element={<TicketDetailPage />} />
+      </Route>
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }

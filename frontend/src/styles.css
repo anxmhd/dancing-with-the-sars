@@ -25,7 +25,7 @@ button, input[type="checkbox"] { accent-color: var(--green); }
 a { color: inherit; }
 
 .app-shell { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
-.topbar { height: 72px; padding: 0 clamp(22px, 5vw, 78px); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e2e6de; background: rgba(255, 254, 250, .94); }
+.topbar { min-height: 72px; padding: 0 clamp(22px, 5vw, 78px); display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid #e2e6de; background: rgba(255, 254, 250, .94); }
 .brand { display: flex; gap: 12px; align-items: center; text-decoration: none; }
 .brand-mark { width: 38px; height: 38px; display: grid; place-items: center; background: var(--green); color: white; border-radius: 50% 50% 46% 46%; font-family: var(--mono); font-size: 12px; letter-spacing: -1px; }
 .brand strong, .brand small { display: block; }
@@ -34,6 +34,10 @@ a { color: inherit; }
 .topbar-note { display: flex; align-items: center; gap: 9px; color: #52645b; font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
 .live-indicator, .map-label-dot { width: 7px; height: 7px; display: inline-block; background: #79a482; border-radius: 50%; box-shadow: 0 0 0 3px #e4eee5; }
 .divider { color: #b3bcb3; }
+.app-nav { display: flex; align-items: stretch; align-self: stretch; gap: 24px; }
+.app-nav a { position: relative; display: inline-flex; align-items: center; color: #687970; font-size: 11px; text-decoration: none; }
+.app-nav a:hover, .app-nav a[aria-current="page"] { color: var(--green); }
+.app-nav a[aria-current="page"]::after { position: absolute; right: 0; bottom: 0; left: 0; height: 2px; content: ""; background: #55775a; }
 
 main { width: 100%; max-width: 1440px; flex: 1 0 auto; margin: 0 auto; padding: 0 clamp(22px, 5vw, 78px) 28px; }
 .hero { display: flex; justify-content: space-between; align-items: flex-end; padding: 49px 0 37px; }
@@ -142,7 +146,8 @@ h1 em { color: #53765e; font-family: Georgia, serif; font-weight: 600; letter-sp
   .workspace { grid-template-columns: minmax(300px, .85fr) minmax(400px, 1.15fr); gap: 16px; }
 }
 @media (max-width: 760px) {
-  .topbar { height: 64px; }
+  .topbar { min-height: 64px; flex-wrap: wrap; gap: 0 14px; padding-top: 8px; padding-bottom: 0; }
+  .app-nav { order: 3; width: 100%; height: 36px; gap: 18px; }
   .topbar-note { font-size: 8px; }
   main { padding: 0 18px; }
   .hero { padding: 36px 0 25px; align-items: start; }

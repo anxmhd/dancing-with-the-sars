@@ -2,11 +2,11 @@
 
 ## Current implementation
 
-The repository is a monorepo with a minimal React/TypeScript frontend and a Python package. The Python package now has a synthetic-tested, per-acquisition Sentinel-2 NDVI processor and series-result assembler in `science/vegetation/`; it has no API, provider adapter, data access, or real-data processing. [The first-workflow contract](DATA_CONTRACTS.md) and [domain model](DOMAIN_MODEL.md) specify shared meanings; they do not imply a complete time-series service.
+The repository is a monorepo with a minimal React/TypeScript frontend and a Python package. The Python package has a synthetic-tested Sentinel-2 NDVI processor and series assembler, public STAC/COG readers for one Sentinel-2 L2A and one Sentinel-1 RTC acquisition, and a local-file NISAR GCOV reader validated against an actual product. The actual NISAR product yields four excluded/null parcel measurements because every candidate pixel fails its source focus mask. These are reproducible scientific command-line workflows, not an API or interactive application. See [the result report](FIRST_REAL_MULTISENSOR_RESULT.md) and [NISAR validation](NISAR_GCOV_PRODUCT_VALIDATION.md). [`contracts/multisensor-response.schema.json`](../contracts/multisensor-response.schema.json) is now the canonical API response shape; the domain model documents its concepts.
 
-## First workflow
+## First integration workflow
 
-The proposed first scientific workflow is to explore one verified agricultural parcel's Sentinel-2 NDVI history. It is gated on finding and inspecting a suitable parcel source and product coverage. It reports an indicator and its provenance; it does not classify stress or infer cause. See [the contracts](DATA_CONTRACTS.md) and [integration guidelines](INTEGRATION_GUIDELINES.md).
+The first user-facing workflow is to select a source-backed parcel, view its geometry on a map, request observations for an inclusive date range and selected missions, and inspect each acquisition's sensor-specific measurements, quality, coverage, provenance, and limitations. The response may include Sentinel-2 NDVI, Sentinel-1 C-band VV/VH, and NISAR L-band GCOV as separate quantities/channels. No common numeric scale or cross-sensor statistic is implied. See the [multisensor handoff](IMPLEMENTATION_GUIDE.md).
 
 ## Responsibilities and ownership
 
@@ -49,7 +49,7 @@ Permitted code dependencies are one-way: backend application/API code may call t
 
 ## API and module timing
 
-FastAPI remains the selected framework when a concrete API is approved. Do not add routes or create empty API/domain/science/data directories in advance. Use [DATA_CONTRACTS.md](DATA_CONTRACTS.md) as the current semantic contract. Before parallel API implementation, choose a single machine-readable contract artifact (likely OpenAPI for HTTP) and derive or validate consumer types and fixtures from it. No endpoint paths are fixed here.
+FastAPI remains the selected framework. The machine-readable response contract and proposed minimum API surface are documented in [IMPLEMENTATION_GUIDE.md](IMPLEMENTATION_GUIDE.md). Routes are still unimplemented; add only the parcel GeoJSON and parcel observations operations needed by that workflow. Do not create speculative services or duplicate the schema in parallel documents.
 
 ## Data flow and storage
 

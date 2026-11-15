@@ -1,55 +1,28 @@
 # Scientific processing interface (provisional)
 
-## Scope and status
+## Implemented responsibilities
 
-The backend package now contains a small, synthetic-tested processor for one parcel and one already selected Sentinel-2 acquisition. It calculates parcel NDVI from caller-supplied red and near-infrared raster bands and a caller-supplied Scene Classification Layer (SCL). It has no provider adapter, archive reader, catalog search, API route, or data download behavior.
+- `science/vegetation/ndvi.py` remains the scientific core for per-acquisition Sentinel-2 NDVI. It requires co-gridded B04/B08 reflectance, accepts SCL on a different grid, aligns categorical SCL with nearest neighbor, applies an explicit policy, aggregates valid parcel pixels, and returns counts plus provenance.
+- `data_access/sentinel2.py` reads Copernicus STAC product metadata and small B04/B08/SCL windows from public Planetary Computer COG mirrors. Source-product scale and offset come from the Copernicus STAC item; temporary access tokens are not written to outputs. It invokes the existing NDVI processor and writes JSON.
+- `data_access/sentinel1.py` reads small VV/VH windows from one public Sentinel-1 RTC STAC item. `science/radar/sentinel1_rtc.py` applies parcel masking and summarizes finite, nonnegative, non-nodata gamma-naught values in linear power. It does not apply additional speckle filtering or a quality mask.
+- `science/radar/nisar_gcov.py` reads one real-valued diagonal covariance layer from a locally available NISAR GCOV HDF5 product. It checks the product/granule ID, layer, units, coordinates, and projection; reads only the parcel window; and applies the product-documented GCOV mask and per-channel fully-focused validity bit when available. It reports mask/exclusion counts, number of looks, and source metadata. The actual product and parcel outcome are documented in [the NISAR validation report](NISAR_GCOV_PRODUCT_VALIDATION.md).
 
-The Python boundary in `backend/src/dancing_with_sars/science/vegetation/ndvi.py` is provisional for Developer 2 to review. It does not freeze or replace `docs/DATA_CONTRACTS.md`; agree on its shape and error mapping before application integration.
+These modules are command-line scientific workflows only. There are no API routes, application orchestration, or frontend behavior. The initial Sentinel-1 and Sentinel-2 results are documented in [FIRST_REAL_MULTISENSOR_RESULT.md](FIRST_REAL_MULTISENSOR_RESULT.md), with the superseding NISAR product result in [NISAR_GCOV_PRODUCT_VALIDATION.md](NISAR_GCOV_PRODUCT_VALIDATION.md).
 
-## Responsibilities
+## Explicit demo choices
 
-- `RasterBand` carries a 2-D array, affine transform, declared CRS, nodata value, scale, and offset. Data-access code must supply the correct product-specific encoding and metadata.
-- `ProcessingPolicy` requires the aggregation statistic (`mean` or `median`), excluded integer SCL class codes, pixel-boundary inclusion choice (`all_touched`), and both minimum-valid-pixel thresholds. There are no scientific policy defaults.
-- `process_parcel_acquisition` validates the parcel geometry and co-grid requirement for red/NIR, transforms the geometry into the raster CRS, rasterizes it, aligns categorical SCL values using nearest-neighbor resampling, applies nodata/finite/denominator/QA masking, calculates NDVI, then aggregates accepted pixels.
-- `NdviObservation` returns a numeric value only when the explicit minimum coverage rules pass. Otherwise, `value` is `None`, status is `excluded`, and reason codes/counts (including SCL-excluded pixels) are retained.
-- `NdviProvenance` records parcel/acquisition references, date, product/version labels supplied by the caller, input/output grid CRS and transforms, statistic, QA class set, pixel policy, thresholds, and red/NIR scale/offset.
-- `assemble_series` only orders already processed acquisition candidates and emits `available`, `no_observations`, or `no_valid_observations`. Acquisition discovery belongs to an eventual data-access/use-case component. Dates without acquisitions remain absent; this function does not interpolate.
+The Sentinel-2 command currently supplies a provisional policy: median NDVI; exclude SCL classes 0, 1, 3, 8, 9, 10, and 11; include pixels whose centers lie in the parcel; require at least 5 valid pixels and 50% valid coverage. Classes 2 and 7 are retained. These settings are reproducible for this small initial case, not approved production defaults or a validated cloud-screening method. Any production workflow requires scientific-owner review of the SCL classes, statistic, pixel inclusion, and coverage limits.
 
-## Scientific constraints and open decisions
+For Sentinel-1, the current method reports its source-declared gamma-zero values in linear power. For NISAR, the actual GCOV product declares unit `1`; the reader preserves the linear gamma-zero values and excludes nonfinite, negative, declared fill-value, invalid/not-fully-focused mask, unset channel focus-bit, and documented sample-slip pixels. The selected NISAR product's parcel candidates all fail its focus masks, so its output values are null. Neither sensor's backscatter is a direct soil-moisture or vegetation-stress observation.
 
-Sentinel-2 L2A documents B04 red and B08 near-infrared at 10 m and SCL at 20 m; confirm these roles and scale/offset from the actual selected product. SCL-to-reflectance alignment in this processor uses nearest neighbor because the SCL classes are categorical. This is a technical alignment method, not a selected production cloud policy. No excluded-class set, minimum coverage, statistic, or parcel-boundary policy is approved as a project default. The caller must state these choices, and the team must review them before real imagery is processed.
+## Product and provenance rules
 
-The processor requires SCL input and treats source SCL nodata, masked-array pixels, and areas outside the SCL footprint as invalid. If a product signals SCL no-data using a class code but does not declare that code as nodata metadata, the caller must include it in the explicit exclusion set. Red and NIR must already share the same shape, transform, and CRS; the processor rejects mismatches instead of silently resampling reflectance. Parcel geometry is passed as GeoJSON-like geometry with an explicit CRS; its CRS is never inferred. Results are indicators and do not establish vegetation stress or its cause.
+- Preserve the original source product ID, acquisition date/time, processing version where available, product/polarization, scale/offset, unit, CRS, resolution, and grid metadata.
+- Sentinel-2 B04/B08 are read at native 10 m and SCL at native 20 m; only categorical SCL is resampled, with nearest neighbor.
+- Do not equate Sentinel-1 C-band and NISAR L-band measurements. Compare numeric values only after documenting frequency, polarization, date, geometry, resolution, processing level, and quantity. Otherwise retain separate observations.
+- Report coverage, missing pixels, and unresolved quality flags. A valid software result is not a scientifically validated finding.
+- NDVI is an indirect vegetation indicator. SAR backscatter depends on soil moisture, vegetation structure, surface roughness, polarization, frequency, acquisition geometry, and processing. Neither alone establishes stress, irrigation, drought effects, groundwater conditions, or causal mechanisms.
 
-## Minimal integration example
+## Tests and scientific validation boundary
 
-The following is a call shape, not real data or an approved policy:
-
-```python
-policy = ProcessingPolicy(
-    statistic="median",  # choose only after team review
-    excluded_scl_classes=frozenset({3, 8, 9, 10}),  # illustrative only
-    all_touched=False,  # illustrative only
-    minimum_valid_pixels=1,  # illustrative only
-    minimum_valid_fraction=0.5,  # illustrative only
-)
-candidate = process_parcel_acquisition(
-    parcel_id=parcel_id,
-    acquisition_id=acquisition_id,
-    acquisition_date=acquisition_date,
-    geometry=parcel_geometry,
-    geometry_crs=parcel_crs,
-    red=red_band,
-    nir=nir_band,
-    scl=scl_band,
-    source_product=product_name,
-    source_product_version=product_version,
-    policy=policy,
-)
-```
-
-The values above only demonstrate explicit arguments. They are not a production QA recommendation. The application layer must map the typed result to the shared semantic contract without reimplementing NDVI or presenting an excluded value as numeric.
-
-## Validation boundary
-
-Tests use small synthetic arrays and geometries. They verify arithmetic, scaling/nodata behavior, QA exclusion/alignment, geometry CRS and pixel inclusion, aggregation, coverage thresholds, provenance, and series status/order. They do not validate a Sentinel-2 source product, real-data coverage, agronomic interpretation, or scientific agreement against field measurements.
+Automated tests use tiny synthetic GeoTIFF/HDF5 fixtures and an optional local-product regression test when the ignored NISAR file is present. They verify software behavior for parcel windows, grids, units, masks, nodata, scaling, and aggregation. They do not establish independent calibration accuracy, field validity, agronomic interpretation, or acceptance of the selected parcel's NISAR measurement. The real NISAR product was successfully read, but its masks exclude all parcel candidate pixels; see [the validation report](NISAR_GCOV_PRODUCT_VALIDATION.md).

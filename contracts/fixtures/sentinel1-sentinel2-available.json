@@ -1,0 +1,388 @@
+{
+  "contractVersion": "1.0",
+  "parcelId": "el haouz_Trees_20240110_036",
+  "query": {
+    "startDate": "2026-10-01",
+    "endDate": "2026-11-30",
+    "requestedMissions": [
+      "Sentinel-1",
+      "Sentinel-2"
+    ]
+  },
+  "sensorResults": [
+    {
+      "mission": "Sentinel-1",
+      "status": "available",
+      "observationCount": 1
+    },
+    {
+      "mission": "Sentinel-2",
+      "status": "available",
+      "observationCount": 1
+    }
+  ],
+  "observations": [
+    {
+      "acquiredAt": "2026-10-26T06:28:03.879586Z",
+      "observationDate": "2026-10-26",
+      "mission": "Sentinel-1",
+      "platform": "sentinel-1c",
+      "instrument": "C-SAR",
+      "sensorDetails": {
+        "instrumentMode": "IW",
+        "frequencyBand": "C",
+        "centerFrequencyGHz": 5.405,
+        "polarizations": [
+          "VV",
+          "VH"
+        ],
+        "relativeOrbit": 154,
+        "orbitState": "descending",
+        "observationDirection": "right"
+      },
+      "source": {
+        "catalogProvider": "Microsoft Planetary Computer Sentinel-1 RTC collection",
+        "dataset": "Sentinel-1 RTC gamma0",
+        "collectionId": "sentinel-1-rtc",
+        "catalogItemId": "S1C_IW_GRDH_1SDV_20261026T062751_20261026T062816_010052_0140FD_rtc",
+        "catalogUrl": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-1-rtc/items/S1C_IW_GRDH_1SDV_20261026T062751_20261026T062816_010052_0140FD_rtc",
+        "sourceProductIdentifier": "S1C_IW_GRDH_1SDV_20261026T062751_20261026T062816_010052_0140FD_DEAB",
+        "productUri": null,
+        "processingVersion": null,
+        "processingDateTime": "2026-10-26T07:19:14.000000Z",
+        "productType": "RTC",
+        "processingLevel": "RTC",
+        "assetSource": null,
+        "sourceProcessingNote": "Source STAC omits unit, scale and offset; product identifier preserved separately from catalog item.",
+        "productMetadata": null
+      },
+      "measurements": [
+        {
+          "quantity": "gamma0BackscatterCoefficient",
+          "frequencyBand": "C",
+          "polarization": "VV",
+          "representation": "linearPower",
+          "value": 0.12140032649040222,
+          "unit": "1",
+          "unitStatus": "adapterDeclaredSourceUnspecified",
+          "statistic": "median",
+          "grid": {
+            "crs": "EPSG:32629",
+            "resolution": [
+              10.0,
+              10.0
+            ],
+            "resolutionUnit": "m",
+            "transformGdal": [
+              623070.0,
+              10.0,
+              0.0,
+              3503690.0,
+              0.0,
+              -10.0
+            ]
+          },
+          "quality": {
+            "status": "accepted",
+            "flags": [],
+            "reasons": [],
+            "validPixelCount": 22,
+            "totalPixelCount": 22,
+            "validPixelFraction": 1.0,
+            "excludedPixelCount": 0
+          },
+          "processing": {
+            "method": "median of finite, nonnegative parcel pixels in linear power",
+            "pixelInclusion": "pixel center",
+            "excludedValues": [
+              "product nodata",
+              "nonfinite",
+              "negative"
+            ],
+            "additionalParcelSummaryFiltering": false,
+            "sourceRaster": {
+              "dataType": "float32",
+              "nodataValue": -32768
+            }
+          }
+        },
+        {
+          "quantity": "gamma0BackscatterCoefficient",
+          "frequencyBand": "C",
+          "polarization": "VV",
+          "representation": "linearPower",
+          "value": 0.1289640102874149,
+          "unit": "1",
+          "unitStatus": "adapterDeclaredSourceUnspecified",
+          "statistic": "mean",
+          "grid": {
+            "crs": "EPSG:32629",
+            "resolution": [
+              10.0,
+              10.0
+            ],
+            "resolutionUnit": "m",
+            "transformGdal": [
+              623070.0,
+              10.0,
+              0.0,
+              3503690.0,
+              0.0,
+              -10.0
+            ]
+          },
+          "quality": {
+            "status": "accepted",
+            "flags": [],
+            "reasons": [],
+            "validPixelCount": 22,
+            "totalPixelCount": 22,
+            "validPixelFraction": 1.0,
+            "excludedPixelCount": 0
+          },
+          "processing": {
+            "method": "mean of finite, nonnegative parcel pixels in linear power",
+            "pixelInclusion": "pixel center",
+            "excludedValues": [
+              "product nodata",
+              "nonfinite",
+              "negative"
+            ],
+            "additionalParcelSummaryFiltering": false,
+            "sourceRaster": {
+              "dataType": "float32",
+              "nodataValue": -32768
+            }
+          }
+        },
+        {
+          "quantity": "gamma0BackscatterCoefficient",
+          "frequencyBand": "C",
+          "polarization": "VH",
+          "representation": "linearPower",
+          "value": 0.016289573162794113,
+          "unit": "1",
+          "unitStatus": "adapterDeclaredSourceUnspecified",
+          "statistic": "median",
+          "grid": {
+            "crs": "EPSG:32629",
+            "resolution": [
+              10.0,
+              10.0
+            ],
+            "resolutionUnit": "m",
+            "transformGdal": [
+              623070.0,
+              10.0,
+              0.0,
+              3503690.0,
+              0.0,
+              -10.0
+            ]
+          },
+          "quality": {
+            "status": "accepted",
+            "flags": [],
+            "reasons": [],
+            "validPixelCount": 22,
+            "totalPixelCount": 22,
+            "validPixelFraction": 1.0,
+            "excludedPixelCount": 0
+          },
+          "processing": {
+            "method": "median of finite, nonnegative parcel pixels in linear power",
+            "pixelInclusion": "pixel center",
+            "excludedValues": [
+              "product nodata",
+              "nonfinite",
+              "negative"
+            ],
+            "additionalParcelSummaryFiltering": false,
+            "sourceRaster": {
+              "dataType": "float32",
+              "nodataValue": -32768
+            }
+          }
+        },
+        {
+          "quantity": "gamma0BackscatterCoefficient",
+          "frequencyBand": "C",
+          "polarization": "VH",
+          "representation": "linearPower",
+          "value": 0.017307163089175116,
+          "unit": "1",
+          "unitStatus": "adapterDeclaredSourceUnspecified",
+          "statistic": "mean",
+          "grid": {
+            "crs": "EPSG:32629",
+            "resolution": [
+              10.0,
+              10.0
+            ],
+            "resolutionUnit": "m",
+            "transformGdal": [
+              623070.0,
+              10.0,
+              0.0,
+              3503690.0,
+              0.0,
+              -10.0
+            ]
+          },
+          "quality": {
+            "status": "accepted",
+            "flags": [],
+            "reasons": [],
+            "validPixelCount": 22,
+            "totalPixelCount": 22,
+            "validPixelFraction": 1.0,
+            "excludedPixelCount": 0
+          },
+          "processing": {
+            "method": "mean of finite, nonnegative parcel pixels in linear power",
+            "pixelInclusion": "pixel center",
+            "excludedValues": [
+              "product nodata",
+              "nonfinite",
+              "negative"
+            ],
+            "additionalParcelSummaryFiltering": false,
+            "sourceRaster": {
+              "dataType": "float32",
+              "nodataValue": -32768
+            }
+          }
+        }
+      ],
+      "limitations": [
+        "C-band gamma-naught backscatter is affected by vegetation, moisture, roughness, geometry, polarization and processing; it is not a direct soil-moisture or stress measurement.",
+        "The source STAC record omits unit, scale, and offset; measurements are summarized as stored linear gamma0 power, not dB."
+      ]
+    },
+    {
+      "acquiredAt": "2026-11-01T11:12:11.025000Z",
+      "observationDate": "2026-11-01",
+      "mission": "Sentinel-2",
+      "platform": "sentinel-2c",
+      "instrument": "MSI",
+      "sensorDetails": {
+        "relativeOrbit": 137,
+        "mgrsTile": "29SPR",
+        "tileCloudCoverPercent": 0.0
+      },
+      "source": {
+        "catalogProvider": "Copernicus Data Space Ecosystem",
+        "dataset": "Sentinel-2 MSI Level-2A surface reflectance",
+        "collectionId": "sentinel-2-l2a",
+        "catalogItemId": "S2C_MSIL2A_20261101T111211_N0513_R137_T29SPR_20261102T152046",
+        "catalogUrl": "https://stac.dataspace.copernicus.eu/v1/collections/sentinel-2-l2a/items/S2C_MSIL2A_20261101T111211_N0513_R137_T29SPR_20261102T152046",
+        "sourceProductIdentifier": "S2C_MSIL2A_20261101T111211_N0513_R137_T29SPR_20261102T152046.SAFE",
+        "productUri": "S2C_MSIL2A_20261101T111211_N0513_R137_T29SPR_20261102T152046.SAFE",
+        "processingVersion": "05.13",
+        "processingDateTime": null,
+        "productType": "MSIL2A",
+        "processingLevel": "L2A",
+        "assetSource": {
+          "provider": "Microsoft Planetary Computer public Sentinel-2 L2A COG mirror",
+          "collectionId": null,
+          "itemId": "S2C_MSIL2A_20261101T111211_R137_T29SPR_20261102T152046"
+        },
+        "sourceProcessingNote": "Source STAC record and distinct public COG mirror item are retained from the scientific CLI artifact.",
+        "productMetadata": null
+      },
+      "measurements": [
+        {
+          "quantity": "NDVI",
+          "representation": "index",
+          "value": 0.368249284984567,
+          "unit": "1",
+          "unitStatus": "definedByQuantity",
+          "statistic": "median",
+          "grid": {
+            "crs": "EPSG:32629",
+            "resolution": [
+              10,
+              10
+            ],
+            "resolutionUnit": "m",
+            "transformGdal": [
+              623070.0,
+              10.0,
+              0.0,
+              3503690.0,
+              0.0,
+              -10.0
+            ]
+          },
+          "quality": {
+            "status": "accepted",
+            "flags": [],
+            "reasons": [],
+            "validPixelCount": 22,
+            "totalPixelCount": 22,
+            "validPixelFraction": 1.0,
+            "excludedPixelCount": 0,
+            "excludedSclPixelCount": 0
+          },
+          "processing": {
+            "method": "sentinel-2-parcel-ndvi-provisional-v1",
+            "bands": {
+              "red": {
+                "asset": "B04",
+                "sourceAsset": "B04_10m",
+                "resolutionM": 10,
+                "scale": 0.0001,
+                "offset": -0.1,
+                "dataType": null,
+                "nodataValue": null
+              },
+              "nir": {
+                "asset": "B08",
+                "sourceAsset": "B08_10m",
+                "resolutionM": 10,
+                "scale": 0.0001,
+                "offset": -0.1,
+                "dataType": null,
+                "nodataValue": null
+              }
+            },
+            "qualityLayer": {
+              "asset": "SCL",
+              "sourceAsset": "SCL_20m",
+              "resolutionM": 20,
+              "resampling": "nearest",
+              "grid": {
+                "crs": "EPSG:32629",
+                "transformGdal": [
+                  623060.0,
+                  20.0,
+                  0.0,
+                  3503700.0,
+                  0.0,
+                  -20.0
+                ]
+              },
+              "excludedClasses": [
+                0,
+                1,
+                3,
+                8,
+                9,
+                10,
+                11
+              ],
+              "retainedClassesNote": "SCL 2 (dark area) and 7 (unclassified) are retained; see method limitations."
+            },
+            "pixelInclusion": "pixel center",
+            "minimumValidPixels": 5,
+            "minimumValidFraction": 0.5
+          }
+        }
+      ],
+      "limitations": [
+        "NDVI is an indirect vegetation index and does not establish crop health, vegetation or water stress, irrigation, drought impact, or groundwater conditions.",
+        "The workflow is provisional; SCL classes 2 and 7 are retained, and no field validation is available."
+      ]
+    }
+  ]
+}

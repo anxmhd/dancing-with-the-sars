@@ -13,6 +13,10 @@ const NISAR_LAYER =
 // Only include dates that you have verified are useful for your area.
 const AVAILABLE_DATES = ["2026-11-06"];
 
+// NASA GIBS supports the WMS TIME parameter, which Leaflet's types omit.
+type DatedWmsOptions = L.WMSOptions & { time: string };
+type DatedWmsParams = L.WMSParams & { time: string };
+
 export default function NisarRegionalMap() {
   const mapElement = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
@@ -43,7 +47,7 @@ export default function NisarRegionalMap() {
     }).addTo(map);
 
     // NASA NISAR GCOV visualization.
-    const layer = L.tileLayer.wms(WMS_URL, {
+    const nisarOptions: DatedWmsOptions = {
       layers: NISAR_LAYER,
       format: "image/png",
       transparent: true,
@@ -51,7 +55,8 @@ export default function NisarRegionalMap() {
       time: selectedDate,
       attribution:
         'NASA NISAR / <a href="https://earthdata.nasa.gov/">NASA GIBS</a>',
-    });
+    };
+    const layer = L.tileLayer.wms(WMS_URL, nisarOptions);
 
     layer.on("tileerror", () => setLayerError(true));
     layer.on("tileload", () => setLayerError(false));
@@ -81,9 +86,8 @@ export default function NisarRegionalMap() {
 
   // Change the NASA imagery date without recreating the map.
   useEffect(() => {
-    nisarLayer.current?.setParams({
-      time: selectedDate,
-    });
+    const params = { time: selectedDate } as DatedWmsParams;
+    nisarLayer.current?.setParams(params);
 
     setLayerError(false);
   }, [selectedDate]);

@@ -1,14 +1,42 @@
 import type { ChartPoint, ChartSeries } from "./charts";
 import type { Observation } from "./types";
 
+function measurementKey(
+  observation: Observation,
+  measurement: Observation["measurements"][number],
+): string {
+  return [
+    observation.mission,
+    observation.acquiredAt,
+    measurement.quantity,
+    measurement.frequency ?? "",
+    measurement.polarization ?? "",
+    measurement.statistic,
+  ].join(":");
+}
+
+function toPoint(
+  observation: Observation,
+  measurement: Observation["measurements"][number],
+): ChartPoint | null {
+  if (measurement.value === null || measurement.quality.status !== "accepted") return null;
+  return {
+    key: measurementKey(observation, measurement),
+    observation,
+    measurement,
+    value: measurement.value,
+    date: new Date(`${observation.observationDate}T00:00:00Z`),
+  };
+}
+
 export function ndviSeries(observations: Observation[]): ChartSeries[] {
   const points: ChartPoint[] = [];
   for (const observation of observations) {
     if (observation.mission !== "Sentinel-2") continue;
     const measurement = observation.measurements.find((item) => item.quantity === "NDVI");
-    if (!measurement || measurement.value === null) continue;
-    if (measurement.quality.status !== "accepted") continue;
-    points.push({ observation, value: measurement.value, date: new Date(`${observation.observationDate}T00:00:00Z`) });
+    if (!measurement) continue;
+    const point = toPoint(observation, measurement);
+    if (point) points.push(point);
   }
   return [{ id: "ndvi", label: "NDVI", color: "#315b47", points }];
 }
@@ -20,12 +48,8 @@ export function sentinel1Series(observations: Observation[]): ChartSeries[] {
     if (observation.mission !== "Sentinel-1") continue;
     for (const measurement of observation.measurements) {
       if (measurement.statistic !== "median") continue;
-      if (measurement.quality.status !== "accepted" || measurement.value === null) continue;
-      const point: ChartPoint = {
-        observation,
-        value: measurement.value,
-        date: new Date(`${observation.observationDate}T00:00:00Z`),
-      };
+      const point = toPoint(observation, measurement);
+      if (!point) continue;
       if (measurement.polarization === "VV") vv.push(point);
       if (measurement.polarization === "VH") vh.push(point);
     }
@@ -43,12 +67,8 @@ export function nisarSeries(observations: Observation[], frequency: "A" | "B"): 
     if (observation.mission !== "NISAR") continue;
     for (const measurement of observation.measurements) {
       if (measurement.frequency !== frequency) continue;
-      if (measurement.quality.status !== "accepted" || measurement.value === null) continue;
-      const point: ChartPoint = {
-        observation,
-        value: measurement.value,
-        date: new Date(`${observation.observationDate}T00:00:00Z`),
-      };
+      const point = toPoint(observation, measurement);
+      if (!point) continue;
       if (measurement.polarization === "HH") hh.push(point);
       if (measurement.polarization === "HV") hv.push(point);
     }

@@ -30,6 +30,13 @@ Backend terminal:
 ```powershell
 cd backend
 uv sync
+uv run uvicorn --factory dancing_with_sars.main:create_app --reload
+```
+
+In a second backend check terminal:
+
+```powershell
+cd backend
 uv run pytest
 uv run ruff check .
 uv run python ../scripts/validate_contract.py

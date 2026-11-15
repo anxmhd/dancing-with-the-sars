@@ -1,3 +1,5 @@
+> **Historical document ? superseded.** This file records an earlier audit/draft stage and is retained for decision history. The current contract authority is `contracts/multisensor-response.schema.json`; implementation guidance is in `docs/IMPLEMENTATION_GUIDE.md`.
+
 # Multisensor contract final revision notes
 
 **Revision date:** 2026-11-14

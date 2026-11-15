@@ -4,7 +4,7 @@ Monitoring agricultural dynamics and climate-related vegetation stress in Morocc
 
 ## Project status
 
-The repository contains the approved development foundation and reproducible command-line workflows that processed one real Sentinel-2 L2A and one Sentinel-1 RTC parcel observation. NISAR GCOV catalog coverage is confirmed and a local HDF5 reader is implemented, but product access currently requires Earthdata authentication. There are no interactive application features or API endpoints, and the initial observations are not scientifically validated. See [the first result report](docs/FIRST_REAL_MULTISENSOR_RESULT.md), [project status](docs/STATUS.md), and [the roadmap](docs/ROADMAP.md).
+The repository contains the approved foundation and reproducible command-line workflows for one real Sentinel-2 L2A, one Sentinel-1 RTC, and one locally supplied NISAR GCOV product. NISAR was read, but the selected parcel's candidate pixels fail the product focus masks; no numeric parcel value is available. The shared version 1.0 multisensor response schema and fixtures are ready for backend/frontend integration. There are no API routes or interactive analysis features, and software-tested observations are not independently scientifically validated. See [the implementation handoff](docs/IMPLEMENTATION_GUIDE.md), [NISAR product validation](docs/NISAR_GCOV_PRODUCT_VALIDATION.md), [project status](docs/STATUS.md), and [the roadmap](docs/ROADMAP.md).
 
 ## Technology
 
@@ -13,7 +13,7 @@ The repository contains the approved development foundation and reproducible com
 - Mapping library: Leaflet is the initial choice for future study-area and parcel layers. It is not installed until map work is approved.
 - API framework: FastAPI is the selected backend direction, deferred until an actual API requirement exists.
 
-The dependency set remains limited to the geospatial and HDF5 libraries used by the implemented workflows. No database or application cloud service is included.
+The dependency set includes the geospatial/HDF5 libraries used by the scientific workflows and `jsonschema` as a development-only dependency for the shared contract validator. No database or application cloud service is included.
 
 ## Prerequisites
 
@@ -32,6 +32,7 @@ cd backend
 uv sync
 uv run pytest
 uv run ruff check .
+uv run python ../scripts/validate_contract.py
 ```
 
 Frontend terminal:
@@ -55,6 +56,7 @@ From `frontend/`, `npm run check` runs TypeScript checking and Vitest; `npm run 
 - [Architecture and module boundaries](docs/ARCHITECTURE.md)
 - [Domain model](docs/DOMAIN_MODEL.md)
 - [First-workflow data contracts](docs/DATA_CONTRACTS.md)
+- [Multisensor implementation handoff](docs/IMPLEMENTATION_GUIDE.md)
 - [Team contracts](docs/TEAM_CONTRACTS.md)
 - [Integration guidelines](docs/INTEGRATION_GUIDELINES.md)
 - [Dataset roadmap and status](docs/DATA_CATALOG.md)

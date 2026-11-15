@@ -1,6 +1,6 @@
 # Methodology and scientific safeguards
 
-The current scientific code implements a provisional, synthetic-tested per-acquisition NDVI processor. It has now processed one real Sentinel-2 L2A acquisition and one Sentinel-1 RTC acquisition for the same reference parcel. The outputs are initial observations, not independently validated science findings; no NISAR raster was accessible for processing. See [the first result report](FIRST_REAL_MULTISENSOR_RESULT.md) and [processor boundary](SCIENCE_PROCESSING.md).
+The current scientific code implements a provisional, synthetic-tested per-acquisition NDVI processor, a Sentinel-1 RTC workflow, and a NISAR GCOV HDF5 workflow validated against an actual product. One parcel result exists for each sensor. The NISAR product's focus masks reject all candidate parcel pixels, so it has no accepted numeric result. None of these outputs is independently validated science evidence. See [the result report](FIRST_REAL_MULTISENSOR_RESULT.md), [NISAR validation](NISAR_GCOV_PRODUCT_VALIDATION.md), and [processor boundary](SCIENCE_PROCESSING.md).
 
 ## Scientific credibility standard
 

@@ -1,3 +1,5 @@
+> **Historical snapshot.** The NISAR section below records the earlier access attempt and is superseded by [`NISAR_GCOV_PRODUCT_VALIDATION.md`](NISAR_GCOV_PRODUCT_VALIDATION.md), which reports the actual locally supplied product.
+
 # First real multisensor result
 
 **Run date:** 2026-11-14

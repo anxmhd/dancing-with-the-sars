@@ -1,0 +1,514 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:dancing-with-the-sars:contracts:multisensor-response:1.0",
+  "title": "Dancing with the SARs multisensor parcel observations response",
+  "description": "Authoritative version 1.0 response schema. Scientific CLI artifacts are mapped to this shape by the backend; they are not API payloads.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "contractVersion": { "const": "1.0" },
+    "parcelId": { "type": "string", "minLength": 1 },
+    "query": { "$ref": "#/$defs/query" },
+    "sensorResults": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/sensorResult" }
+    },
+    "observations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/observation" }
+    }
+  },
+  "required": ["contractVersion", "parcelId", "query", "sensorResults", "observations"],
+  "$defs": {
+    "mission": {
+      "type": "string",
+      "enum": ["Sentinel-2", "Sentinel-1", "NISAR"]
+    },
+    "query": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "startDate": { "type": "string", "format": "date" },
+        "endDate": { "type": "string", "format": "date" },
+        "requestedMissions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/mission" }
+        }
+      },
+      "required": ["startDate", "endDate", "requestedMissions"]
+    },
+    "sensorResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mission": { "$ref": "#/$defs/mission" },
+        "status": {
+          "type": "string",
+          "enum": ["available", "noObservations", "noValidObservations", "unavailable"]
+        },
+        "observationCount": { "type": "integer", "minimum": 0 }
+      },
+      "required": ["mission", "status", "observationCount"]
+    },
+    "nullableString": { "type": ["string", "null"] },
+    "nullableNumber": { "type": ["number", "null"] },
+    "nullableInteger": { "type": ["integer", "null"] },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "catalogProvider": {
+          "type": ["string", "null"],
+          "description": "Provider of the exact catalog metadata record. Null when the record was not retained or established."
+        },
+        "dataset": { "type": "string", "minLength": 1 },
+        "collectionId": {
+          "type": ["string", "null"],
+          "description": "Exact source collection identifier when known; otherwise null."
+        },
+        "catalogItemId": {
+          "type": ["string", "null"],
+          "description": "Exact catalog item identifier; do not substitute a source product or granule identifier."
+        },
+        "catalogUrl": { "type": ["string", "null"], "format": "uri" },
+        "sourceProductIdentifier": {
+          "type": ["string", "null"],
+          "description": "Original product/granule identifier from product or provider metadata, distinct from catalogItemId."
+        },
+        "productUri": { "type": ["string", "null"] },
+        "processingVersion": { "type": ["string", "null"] },
+        "processingDateTime": {
+          "type": ["string", "null"],
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T.*Z$"
+        },
+        "productType": { "type": ["string", "null"] },
+        "processingLevel": { "type": ["string", "null"] },
+        "assetSource": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/$defs/assetSource" }
+          ]
+        },
+        "sourceProcessingNote": { "type": ["string", "null"] },
+        "productMetadata": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/$defs/nisarProductMetadata" }
+          ]
+        }
+      },
+      "required": [
+        "catalogProvider", "dataset", "collectionId", "catalogItemId", "catalogUrl",
+        "sourceProductIdentifier", "productUri", "processingVersion", "processingDateTime",
+        "productType", "processingLevel", "assetSource", "sourceProcessingNote", "productMetadata"
+      ]
+    },
+    "assetSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "provider": { "type": "string", "minLength": 1 },
+        "collectionId": { "type": ["string", "null"] },
+        "itemId": { "type": ["string", "null"] }
+      },
+      "required": ["provider", "collectionId", "itemId"]
+    },
+    "nisarProductMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "granuleId": { "type": "string", "minLength": 1 },
+        "platformName": { "type": "string" },
+        "instrumentName": { "type": "string" },
+        "productType": { "type": "string" },
+        "productLevel": { "type": "string" },
+        "productVersion": { "type": "string" },
+        "productSpecificationVersion": { "type": "string" },
+        "processingDateTime": { "type": "string" },
+        "processingType": { "type": "string" },
+        "processingCenter": { "type": "string" },
+        "compositeReleaseId": { "type": "string" },
+        "radarBand": { "type": "string", "const": "L" },
+        "zeroDopplerStartTime": { "type": "string" },
+        "zeroDopplerEndTime": { "type": "string" },
+        "orbitPassDirection": { "type": "string" },
+        "lookDirection": { "type": "string" },
+        "trackNumber": { "type": "integer" },
+        "absoluteOrbitNumber": { "type": "integer" },
+        "listOfFrequencies": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["A", "B"] }
+        },
+        "listOfObservationModes": { "type": "array", "items": { "type": "string" } },
+        "isFullFrame": { "type": "string" },
+        "frameNumber": { "type": "integer" },
+        "hasInputDataException": { "type": "integer" },
+        "productDoi": { "type": "string" }
+      },
+      "required": [
+        "granuleId", "platformName", "instrumentName", "productType", "productLevel",
+        "productVersion", "productSpecificationVersion", "processingDateTime", "processingType",
+        "processingCenter", "compositeReleaseId", "radarBand", "zeroDopplerStartTime",
+        "zeroDopplerEndTime", "orbitPassDirection", "lookDirection", "trackNumber",
+        "absoluteOrbitNumber", "listOfFrequencies", "listOfObservationModes", "isFullFrame",
+        "frameNumber", "hasInputDataException", "productDoi"
+      ]
+    },
+    "grid": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "crs": { "type": "string", "pattern": "^EPSG:[0-9]+$" },
+        "resolution": {
+          "type": "array",
+          "prefixItems": [
+            { "type": "number", "exclusiveMinimum": 0 },
+            { "type": "number", "exclusiveMinimum": 0 }
+          ],
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "resolutionUnit": { "type": "string", "const": "m" },
+        "transformGdal": {
+          "type": "array",
+          "prefixItems": [
+            { "type": "number" }, { "type": "number" }, { "type": "number" },
+            { "type": "number" }, { "type": "number" }, { "type": "number" }
+          ],
+          "minItems": 6,
+          "maxItems": 6
+        }
+      },
+      "required": ["crs", "resolution", "resolutionUnit", "transformGdal"]
+    },
+    "quality": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": { "type": "string", "enum": ["accepted", "excluded", "unknown"] },
+        "flags": {
+          "type": ["array", "null"],
+          "items": { "type": "string" },
+          "description": "Null means source flags were unavailable or not summarized; an empty array means they were assessed and none apply."
+        },
+        "reasons": { "type": "array", "items": { "type": "string" } },
+        "validPixelCount": { "$ref": "#/$defs/nullableInteger" },
+        "totalPixelCount": { "$ref": "#/$defs/nullableInteger" },
+        "validPixelFraction": {
+          "oneOf": [
+            { "type": "null" },
+            { "type": "number", "minimum": 0, "maximum": 1 }
+          ]
+        },
+        "excludedPixelCount": { "$ref": "#/$defs/nullableInteger" },
+        "excludedSclPixelCount": { "$ref": "#/$defs/nullableInteger" },
+        "excludedByGcovMaskCount": { "$ref": "#/$defs/nullableInteger" },
+        "excludedByChannelFocusBitCount": { "$ref": "#/$defs/nullableInteger" },
+        "excludedBySampleSlipCount": { "$ref": "#/$defs/nullableInteger" },
+        "gcovMaskValueCounts": {
+          "oneOf": [
+            { "type": "null" },
+            { "type": "object", "patternProperties": { "^[0-9]+$": { "type": "integer", "minimum": 0 } }, "additionalProperties": false }
+          ]
+        },
+        "inputDataExceptionMaskValueCounts": {
+          "oneOf": [
+            { "type": "null" },
+            { "type": "object", "patternProperties": { "^[0-9]+$": { "type": "integer", "minimum": 0 } }, "additionalProperties": false }
+          ]
+        }
+      },
+      "required": [
+        "status", "flags", "reasons", "validPixelCount", "totalPixelCount",
+        "validPixelFraction", "excludedPixelCount"
+      ]
+    },
+    "observation": {
+      "type": "object",
+      "properties": {
+        "acquiredAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T.*Z$",
+          "description": "RFC 3339 UTC acquisition instant. Preserve source fractional-second precision."
+        },
+        "observationDate": { "type": "string", "format": "date" },
+        "mission": { "$ref": "#/$defs/mission" },
+        "platform": { "type": "string", "minLength": 1 },
+        "instrument": { "type": "string", "minLength": 1 },
+        "sensorDetails": { "type": "object" },
+        "source": { "$ref": "#/$defs/source" },
+        "measurements": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/measurement" }
+        },
+        "limitations": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["acquiredAt", "observationDate", "mission", "platform", "instrument", "sensorDetails", "source", "measurements", "limitations"],
+      "oneOf": [
+        {
+          "properties": {
+            "mission": { "const": "Sentinel-2" },
+            "sensorDetails": { "$ref": "#/$defs/sentinel2Details" },
+            "measurements": { "items": { "$ref": "#/$defs/ndviMeasurement" } }
+          }
+        },
+        {
+          "properties": {
+            "mission": { "const": "Sentinel-1" },
+            "sensorDetails": { "$ref": "#/$defs/sentinel1Details" },
+            "measurements": { "items": { "$ref": "#/$defs/sentinel1Measurement" } }
+          }
+        },
+        {
+          "properties": {
+            "mission": { "const": "NISAR" },
+            "sensorDetails": { "$ref": "#/$defs/nisarDetails" },
+            "measurements": { "items": { "$ref": "#/$defs/nisarMeasurement" } }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "sentinel2Details": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "relativeOrbit": { "$ref": "#/$defs/nullableInteger" },
+        "mgrsTile": { "$ref": "#/$defs/nullableString" },
+        "tileCloudCoverPercent": { "$ref": "#/$defs/nullableNumber" }
+      },
+      "required": ["relativeOrbit", "mgrsTile", "tileCloudCoverPercent"]
+    },
+    "sentinel1Details": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "instrumentMode": { "$ref": "#/$defs/nullableString" },
+        "frequencyBand": { "type": "string", "const": "C" },
+        "centerFrequencyGHz": { "$ref": "#/$defs/nullableNumber" },
+        "polarizations": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "enum": ["VV", "VH"] }
+        },
+        "relativeOrbit": { "$ref": "#/$defs/nullableInteger" },
+        "orbitState": { "$ref": "#/$defs/nullableString" },
+        "observationDirection": { "$ref": "#/$defs/nullableString" }
+      },
+      "required": ["instrumentMode", "frequencyBand", "centerFrequencyGHz", "polarizations", "relativeOrbit", "orbitState", "observationDirection"]
+    },
+    "nisarDetails": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "radarBand": { "type": "string", "const": "L" },
+        "orbitPassDirection": { "$ref": "#/$defs/nullableString" },
+        "lookDirection": { "$ref": "#/$defs/nullableString" },
+        "trackNumber": { "$ref": "#/$defs/nullableInteger" },
+        "absoluteOrbitNumber": { "$ref": "#/$defs/nullableInteger" },
+        "productFrequencies": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "enum": ["A", "B"] }
+        }
+      },
+      "required": ["radarBand", "orbitPassDirection", "lookDirection", "trackNumber", "absoluteOrbitNumber", "productFrequencies"]
+    },
+    "measurementCommon": {
+      "type": "object",
+      "properties": {
+        "quantity": { "type": "string" },
+        "representation": { "type": "string" },
+        "value": { "$ref": "#/$defs/nullableNumber" },
+        "unit": { "type": "string", "minLength": 1 },
+        "unitStatus": { "type": "string", "enum": ["definedByQuantity", "adapterDeclaredSourceUnspecified"] },
+        "statistic": { "type": "string", "enum": ["median", "mean"] },
+        "grid": { "$ref": "#/$defs/grid" },
+        "quality": { "$ref": "#/$defs/quality" },
+        "processing": { "type": "object" }
+      },
+      "required": ["quantity", "representation", "value", "unit", "unitStatus", "statistic", "grid", "quality", "processing"],
+      "allOf": [
+        {
+          "if": { "properties": { "quality": { "properties": { "status": { "const": "accepted" } }, "required": ["status"] } }, "required": ["quality"] },
+          "then": { "properties": { "value": { "type": "number" } } }
+        },
+        {
+          "if": { "properties": { "quality": { "properties": { "status": { "enum": ["excluded", "unknown"] } }, "required": ["status"] } }, "required": ["quality"] },
+          "then": { "properties": { "value": { "type": "null" } } }
+        }
+      ]
+    },
+    "measurement": {
+      "allOf": [
+        { "$ref": "#/$defs/measurementCommon" },
+        {
+          "oneOf": [
+            { "$ref": "#/$defs/ndviMeasurement" },
+            { "$ref": "#/$defs/sentinel1Measurement" },
+            { "$ref": "#/$defs/nisarMeasurement" }
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "ndviMeasurement": {
+      "type": "object",
+      "properties": {
+        "quantity": { "const": "NDVI" },
+        "representation": { "const": "index" },
+        "unit": { "const": "1" },
+        "unitStatus": { "const": "definedByQuantity" },
+        "statistic": { "const": "median" },
+        "processing": { "$ref": "#/$defs/ndviProcessing" }
+      },
+      "required": ["quantity", "representation", "unit", "unitStatus", "statistic", "processing"],
+      "not": { "anyOf": [{ "required": ["frequency"] }, { "required": ["frequencyBand"] }, { "required": ["polarization"] }, { "required": ["covarianceTerm"] }] }
+    },
+    "sentinel1Measurement": {
+      "type": "object",
+      "properties": {
+        "quantity": { "const": "gamma0BackscatterCoefficient" },
+        "frequencyBand": { "const": "C" },
+        "polarization": { "type": "string", "enum": ["VV", "VH"] },
+        "representation": { "const": "linearPower" },
+        "unit": { "const": "1" },
+        "unitStatus": { "const": "adapterDeclaredSourceUnspecified" },
+        "statistic": { "enum": ["median", "mean"] },
+        "processing": { "$ref": "#/$defs/sentinel1Processing" }
+      },
+      "required": ["quantity", "frequencyBand", "polarization", "representation", "unit", "unitStatus", "statistic", "processing"],
+      "not": { "anyOf": [{ "required": ["frequency"] }, { "required": ["covarianceTerm"] }] }
+    },
+    "nisarMeasurement": {
+      "type": "object",
+      "properties": {
+        "quantity": { "const": "gamma0BackscatterCoefficient" },
+        "frequency": { "type": "string", "enum": ["A", "B"] },
+        "polarization": { "type": "string", "enum": ["HH", "HV"] },
+        "covarianceTerm": { "type": "string", "enum": ["HHHH", "HVHV"] },
+        "representation": { "const": "linearPower" },
+        "unit": { "const": "1" },
+        "unitStatus": { "const": "definedByQuantity" },
+        "statistic": { "const": "median" },
+        "processing": { "$ref": "#/$defs/nisarProcessing" }
+      },
+      "required": ["quantity", "frequency", "polarization", "covarianceTerm", "representation", "unit", "unitStatus", "statistic", "processing"],
+      "not": { "required": ["frequencyBand"] }
+    },
+    "ndviProcessing": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "method": { "type": "string" },
+        "bands": { "$ref": "#/$defs/ndviBands" },
+        "qualityLayer": { "$ref": "#/$defs/sclLayer" },
+        "pixelInclusion": { "type": "string", "const": "pixel center" },
+        "minimumValidPixels": { "type": "integer", "minimum": 0 },
+        "minimumValidFraction": { "type": "number", "minimum": 0, "maximum": 1 }
+      },
+      "required": ["method", "bands", "qualityLayer", "pixelInclusion", "minimumValidPixels", "minimumValidFraction"]
+    },
+    "ndviBands": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": { "red": { "$ref": "#/$defs/reflectanceBand" }, "nir": { "$ref": "#/$defs/reflectanceBand" } },
+      "required": ["red", "nir"]
+    },
+    "reflectanceBand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "asset": { "type": "string", "enum": ["B04", "B08"] },
+        "sourceAsset": { "type": "string" },
+        "resolutionM": { "type": "number", "exclusiveMinimum": 0 },
+        "scale": { "type": "number" },
+        "offset": { "type": "number" },
+        "dataType": { "$ref": "#/$defs/nullableString" },
+        "nodataValue": { "$ref": "#/$defs/nullableNumber" }
+      },
+      "required": ["asset", "sourceAsset", "resolutionM", "scale", "offset", "dataType", "nodataValue"]
+    },
+    "sclLayer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "asset": { "const": "SCL" },
+        "sourceAsset": { "type": "string" },
+        "resolutionM": { "type": "number", "exclusiveMinimum": 0 },
+        "resampling": { "type": "string", "const": "nearest" },
+        "grid": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": { "crs": { "type": "string", "pattern": "^EPSG:[0-9]+$" }, "transformGdal": { "$ref": "#/$defs/grid/properties/transformGdal" } },
+          "required": ["crs", "transformGdal"]
+        },
+        "excludedClasses": { "type": "array", "uniqueItems": true, "items": { "type": "integer", "minimum": 0, "maximum": 11 } },
+        "retainedClassesNote": { "type": "string" }
+      },
+      "required": ["asset", "sourceAsset", "resolutionM", "resampling", "grid", "excludedClasses", "retainedClassesNote"]
+    },
+    "sentinel1Processing": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "method": { "type": "string" },
+        "pixelInclusion": { "type": "string", "const": "pixel center" },
+        "excludedValues": { "type": "array", "items": { "type": "string" } },
+        "additionalParcelSummaryFiltering": { "type": "boolean" },
+        "sourceRaster": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": { "dataType": { "$ref": "#/$defs/nullableString" }, "nodataValue": { "$ref": "#/$defs/nullableNumber" } },
+          "required": ["dataType", "nodataValue"]
+        }
+      },
+      "required": ["method", "pixelInclusion", "excludedValues", "additionalParcelSummaryFiltering", "sourceRaster"]
+    },
+    "nisarProcessing": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "method": { "type": "string" },
+        "geometryCrs": { "type": "string", "pattern": "^EPSG:[0-9]+$" },
+        "pixelInclusion": { "type": "string", "const": "pixel center" },
+        "qualityRule": { "type": "string" },
+        "validityBit": { "type": "integer", "enum": [256, 512] },
+        "fillValueHandling": { "type": "string" },
+        "interpretationLimit": { "type": "string" },
+        "sourceLayer": { "type": "string" },
+        "covarianceDescription": { "type": "string" },
+        "sourceUnits": { "type": "string", "const": "1" },
+        "sourceDataType": { "type": "string", "const": "float32" },
+        "sourceFillValue": { "$ref": "#/$defs/nullableNumber" },
+        "sourceFillValueIsNaN": { "type": "boolean" },
+        "numberOfLooksWithinCandidatePixels": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": { "minimum": { "type": "number", "exclusiveMinimum": 0 }, "median": { "type": "number", "exclusiveMinimum": 0 }, "maximum": { "type": "number", "exclusiveMinimum": 0 } },
+              "required": ["minimum", "median", "maximum"]
+            }
+          ]
+        },
+        "centerFrequencyHz": { "type": "number", "exclusiveMinimum": 0 },
+        "processedRangeBandwidthHz": { "type": "number", "exclusiveMinimum": 0 },
+        "gcovMaskDescription": { "type": "string" },
+        "inputDataExceptionMaskDescription": { "type": ["string", "null"] }
+      },
+      "required": [
+        "method", "geometryCrs", "pixelInclusion", "qualityRule", "validityBit", "fillValueHandling",
+        "interpretationLimit", "sourceLayer", "covarianceDescription", "sourceUnits", "sourceDataType",
+        "sourceFillValue", "sourceFillValueIsNaN", "numberOfLooksWithinCandidatePixels", "centerFrequencyHz",
+        "processedRangeBandwidthHz", "gcovMaskDescription", "inputDataExceptionMaskDescription"
+      ]
+    }
+  }
+}

@@ -2,9 +2,9 @@
 
 ## Foundation checks
 
-The code has a frontend identity shell, Python package foundation, a provisional per-acquisition NDVI processor, Sentinel-2 and Sentinel-1 RTC product readers, and a local NISAR GCOV HDF5 reader. Deterministic tests use synthetic raster/HDF5 fixtures for reader windows, units, nodata, masks, and parcel summaries; they verify software behavior only. Separately, one real Sentinel-2 and one real Sentinel-1 acquisition were read over the selected parcel. This demonstrates execution against those assets but does not establish scientific validation. No real NISAR HDF5 file was accessed.
+The code has a frontend identity shell, Python package foundation, a provisional per-acquisition NDVI processor, Sentinel-2 and Sentinel-1 RTC product readers, and a NISAR GCOV HDF5 reader tested against an actual local product. Deterministic tests use synthetic raster/HDF5 fixtures for reader windows, units, nodata, masks, and parcel summaries; they verify software behavior only. The actual NISAR product was read and summarized, but its source focus masks reject every selected-parcel candidate, so there is no accepted numeric parcel value. Software tests and successful file reading do not establish scientific validation; see [the product report](NISAR_GCOV_PRODUCT_VALIDATION.md).
 
-Run checks as described in [the README](../README.md). CI runs Python tests and linting plus frontend type checking, tests, and a production build.
+Run checks as described in [the README](../README.md). CI runs Python tests, linting, and the JSON Schema/fixture validator, plus frontend type checking, tests, and a production build.
 
 ## Future software testing
 

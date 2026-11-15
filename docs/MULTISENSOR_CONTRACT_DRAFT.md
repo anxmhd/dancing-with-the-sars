@@ -1,3 +1,5 @@
+> **Historical document ? superseded.** This file records an earlier audit/draft stage and is retained for decision history. The current contract authority is `contracts/multisensor-response.schema.json`; implementation guidance is in `docs/IMPLEMENTATION_GUIDE.md`.
+
 # Multisensor parcel observation contract (draft)
 
 **Status:** Final draft for backend, frontend, and scientific-owner approval. This document does not replace `DATA_CONTRACTS.md` until all owners approve it.

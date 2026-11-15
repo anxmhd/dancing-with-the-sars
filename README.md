@@ -43,7 +43,15 @@ npm ci
 npm run dev
 ```
 
-The frontend currently renders a small project identity shell only. It has no map, data, or analytical features.
+The frontend reads the API base URL from `VITE_API_BASE_URL`. Leave it unset for
+same-origin/local proxy use, or set it to the deployed API origin without a trailing slash.
+The backend allows the two local Vite origins by default. For deployment, set
+`CORS_ORIGINS` to a comma-separated list of exact frontend origins, also without trailing
+slashes. Do not use a wildcard origin for the public API.
+
+The deployed API must retain access to the repository-level `contracts/` and
+`data/results/` directories. On a monorepo host, keep the service root at the repository
+root and run the Python build and start commands from `backend/`.
 
 ## Checks
 

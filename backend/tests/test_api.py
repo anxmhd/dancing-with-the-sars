@@ -9,9 +9,11 @@ from typing import Any
 
 from fastapi import HTTPException
 from jsonschema import Draft202012Validator
+from pytest import MonkeyPatch
 
 from dancing_with_sars.api.main import (
     Mission,
+    _cors_origins,
     _error,
     build_observation_response,
     parcel_feature,
@@ -27,6 +29,28 @@ def _schema(name: str) -> dict[str, Any]:
 
 def _response_body(response: Any) -> dict[str, Any]:
     return json.loads(response.body.decode("utf-8"))
+
+
+def test_cors_origins_default_to_local_development(monkeypatch: MonkeyPatch) -> None:
+    monkeypatch.delenv("CORS_ORIGINS", raising=False)
+
+    assert _cors_origins() == [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ]
+
+
+def test_cors_origins_use_normalized_environment_values(monkeypatch: MonkeyPatch) -> None:
+    monkeypatch.setenv(
+        "CORS_ORIGINS",
+        " https://dancing-with-the-sars.pages.dev/, "
+        "https://preview.dancing-with-the-sars.pages.dev ",
+    )
+
+    assert _cors_origins() == [
+        "https://dancing-with-the-sars.pages.dev",
+        "https://preview.dancing-with-the-sars.pages.dev",
+    ]
 
 
 def test_lists_and_retrieves_only_the_source_backed_parcel() -> None:

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 from datetime import date
 from enum import Enum
 from pathlib import Path
@@ -25,6 +26,21 @@ from dancing_with_sars.api.serializers import (
 )
 
 logger = logging.getLogger(__name__)
+DEFAULT_CORS_ORIGINS = (
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+)
+
+
+def _cors_origins() -> list[str]:
+    configured_origins = os.getenv("CORS_ORIGINS", ",".join(DEFAULT_CORS_ORIGINS))
+    return [
+        origin.strip().rstrip("/")
+        for origin in configured_origins.split(",")
+        if origin.strip()
+    ]
+
+
 app = FastAPI(
     title="Dancing with the SARs API",
     description=(
@@ -35,7 +51,7 @@ app = FastAPI(
 )
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=_cors_origins(),
     allow_credentials=False,
     allow_methods=["GET"],
     allow_headers=["*"],

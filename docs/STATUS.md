@@ -4,27 +4,26 @@ Last updated: 2026-11-14
 
 ## Established
 
-- Project instructions and scientific safeguards in `AGENTS.md`.
-- Initial React/TypeScript/Vite frontend shell with a Vitest smoke test.
-- Python package metadata, Pytest smoke test, Ruff configuration, and a generated `uv.lock`.
-- Architecture, dataset roadmap/status vocabulary, methodology safeguards, validation approach, contribution workflow, and phased roadmap.
-- Shared first-workflow domain model, semantic data contracts, module ownership, naming rules, and integration guidelines. These documents do not represent implemented endpoints or verified data.
-- Backend API foundation on branch `feature/backend-api-foundation`: FastAPI app, health endpoint, parcel NDVI time-series endpoint, validation, error envelope, and synthetic mock scientific provider.
-- Proposed machine-readable HTTP contract at `docs/api/openapi.yaml`, generated from the app and checked for drift by tests. It is not yet reviewed or frozen.
-- Shared synthetic response fixture at `tests/fixtures/vegetation-series.synthetic.json`.
+- Project foundation, development rules, scientific safeguards, React/TypeScript shell, Python package, CI, and locked dependencies.
+- Provisional Sentinel-2 L2A NDVI workflow and one real El Haouz parcel result.
+- Sentinel-1 RTC workflow and one real El Haouz VV/VH gamma-zero result, with distinct mean/median values and explicit source unit caveat.
+- NISAR GCOV reader inspected against an actual locally supplied HDF5 product; four diagonal frequency/polarization candidate records are produced with source lineage, grids, masks, and quality counts. All parcel candidates fail source focus validity; values remain null.
+- Authoritative JSON Schema Draft 2020-12 v1.0 observation and error contracts, five shared fixtures, cross-field validator, and API/frontend integration handoff.
+- Contract validation passed locally: both schemas valid, all five fixtures accepted, source artifact values checked, and nine invalid-payload cases rejected.
+- Raw satellite products and other large data remain excluded from Git.
 
 ## Not established
 
-- No real scientific engine, raster processing, or internal scientific modules; the science boundary is a protocol served by a mock.
-- No real parcel boundary/source, satellite product, acquisition, quality policy, or NDVI value. No scientific data acquired, inspected, processed, integrated, or validated.
-- No map/chart library installed, database, deployment, or cloud infrastructure.
-- No frontend integration with the API; the frontend remains the identity shell.
-- The OpenAPI document and API-to-science interface await review by the frontend and scientific owners.
+- No API routes, backend response serializer, database, or interactive map/results workflow exists yet.
+- No accepted NISAR value exists for the selected parcel. There is no Sentinel-1/NISAR numeric comparison.
+- No multi-acquisition time series, climate workflow, independent reference validation, or field validation exists.
+- Sentinel-2 SCL exclusion/statistic/coverage choices remain explicit provisional demo policy; S1 unit/scale/offset are omitted by source STAC; exact NISAR catalog URL/transfer record was not retained.
+- Figshare's historical 2023–2025 survey labels do not validate 2026 satellite observations; its supplied NDVI CSVs are not integrated.
 
 ## Verification status
 
-Backend on Python 3.13.18 via uv: `uv sync --locked`, `uv run --locked pytest` (38 passed), and `uv run --locked ruff check .` completed successfully, and the committed OpenAPI document matches the application. The earlier foundation verification also passed frontend `npm ci`, `npm run check`, and `npm run build`; the frontend was not changed by the backend work. These checks exercise software and contract shape only; they are not scientific validation.
+Contract-only validation passed: both schemas are valid, all five fixtures are accepted, S1/S2/NISAR fixture evidence matches the scientific artifacts, and nine invalid payloads are rejected. Backend Pytest passed (22 tests), Ruff passed, frontend typecheck/Vitest passed (1 test), Vite build passed, and `git diff --check` passed. Raw NISAR source remains ignored. Contract validity demonstrates structural compatibility only. Reader/software tests, product reading, and internal consistency do not establish independent scientific validity.
 
 ## Next step
 
-Review the proposed OpenAPI document and application-to-science interface with the frontend and scientific owners. The endpoint path, error mapping, parcel geometry/CRS source, product coverage, processing level, aggregation method, and quality policy remain unverified or undecided.
+Backend and frontend developers can implement against the frozen schema and fixtures, following [the implementation handoff](IMPLEMENTATION_GUIDE.md). Backend should implement the parcel lookup/observation serializer and API behavior first; frontend can build against fixtures in parallel and connect after the serializer is available. Do not add an S1/NISAR comparison or interpret NDVI as stress without additional evidence and an approved method.

@@ -2,11 +2,11 @@
 
 ## Current implementation
 
-The repository is a monorepo with a minimal React/TypeScript frontend and a Python backend. The backend now contains a FastAPI API layer, an application layer (validation, orchestration, explicit serialization), shared domain value types, and a deterministic synthetic scientific provider behind the application-to-science interface. It has no dataset access, geospatial processing, real scientific module, or database. [The first-workflow contract](DATA_CONTRACTS.md) and [domain model](DOMAIN_MODEL.md) specify intended boundaries; the API is the only implemented consumer so far. `docs/api/openapi.yaml` is the proposed machine-readable HTTP contract.
+The repository is a monorepo with a minimal React/TypeScript frontend and a Python package. The Python package has a synthetic-tested Sentinel-2 NDVI processor and series assembler, public STAC/COG readers for one Sentinel-2 L2A and one Sentinel-1 RTC acquisition, and a local-file NISAR GCOV reader validated against an actual product. The actual NISAR product yields four excluded/null parcel measurements because every candidate pixel fails its source focus mask. These are reproducible scientific command-line workflows, not an API or interactive application. See [the result report](FIRST_REAL_MULTISENSOR_RESULT.md) and [NISAR validation](NISAR_GCOV_PRODUCT_VALIDATION.md). [`contracts/multisensor-response.schema.json`](../contracts/multisensor-response.schema.json) is now the canonical API response shape; the domain model documents its concepts.
 
-## First workflow
+## First integration workflow
 
-The proposed first scientific workflow is to explore one verified agricultural parcel's Sentinel-2 NDVI history. It is gated on finding and inspecting a suitable parcel source and product coverage. It reports an indicator and its provenance; it does not classify stress or infer cause. See [the contracts](DATA_CONTRACTS.md) and [integration guidelines](INTEGRATION_GUIDELINES.md).
+The first user-facing workflow is to select a source-backed parcel, view its geometry on a map, request observations for an inclusive date range and selected missions, and inspect each acquisition's sensor-specific measurements, quality, coverage, provenance, and limitations. The response may include Sentinel-2 NDVI, Sentinel-1 C-band VV/VH, and NISAR L-band GCOV as separate quantities/channels. No common numeric scale or cross-sensor statistic is implied. See the [multisensor handoff](IMPLEMENTATION_GUIDE.md).
 
 ## Responsibilities and ownership
 
@@ -18,7 +18,7 @@ The proposed first scientific workflow is to explore one verified agricultural p
 | Scientific processing | Applying the approved quality policy, calculating NDVI, parcel-level valid-pixel aggregation, and processing provenance | Explicit arrays/masks/geometries, domain concepts, focused geospatial libraries | FastAPI, API schemas, frontend code, or hidden downloads |
 | Domain concepts | Stable meanings and relationships shared across application and science | Standard language types and documented semantics | Frameworks, providers, storage schemas, or rendering |
 
-The table describes target responsibilities. The API and application layers exist; the scientific data-access and processing modules do not. Until they do, the application is wired to a mock provider that performs no science.
+The table describes target responsibilities. The repository currently has the frontend shell and the focused scientific processor described in [SCIENCE_PROCESSING.md](SCIENCE_PROCESSING.md); the API, product access, and workflow orchestration are not implemented.
 
 ## Data and dependency flow
 
@@ -49,7 +49,7 @@ Permitted code dependencies are one-way: backend application/API code may call t
 
 ## API and module timing
 
-FastAPI is the selected framework and now serves the approved first workflow. Keep `docs/api/openapi.yaml` as the single machine-readable HTTP contract and derive or validate consumer types and fixtures from it rather than maintaining copies. No endpoint paths are fixed in this document; see the OpenAPI artifact. Do not create empty `science/` or `data/` modules in advance; the application-to-science interface is defined in `backend/src/dancing_with_sars/application/science_contract.py` and is awaiting scientific-owner review.
+FastAPI remains the selected framework. The machine-readable response contract and proposed minimum API surface are documented in [IMPLEMENTATION_GUIDE.md](IMPLEMENTATION_GUIDE.md). Routes are still unimplemented; add only the parcel GeoJSON and parcel observations operations needed by that workflow. Do not create speculative services or duplicate the schema in parallel documents.
 
 ## Data flow and storage
 

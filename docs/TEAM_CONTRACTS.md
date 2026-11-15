@@ -9,7 +9,7 @@ Use these terms consistently:
 - **Platform:** the spacecraft/mission vehicle; **sensor:** the instrument that collects data.
 - **Satellite product:** provider-defined collection/product and processing level/version.
 - **Acquisition / satellite observation:** a source observation at a product-specific granularity.
-- **Vegetation observation:** a derived, parcel-level indicator linked to one acquisition and processing version.
+- **Parcel observation:** one parcel/acquisition record containing one or more sensor-specific measurements and their quality/provenance.
 - **Provenance:** source and processing lineage.
 - **Quality:** source flags or a derived acceptance/exclusion assessment; state which is represented.
 - **Missing:** no observation is available. **Excluded:** a candidate exists but fails a stated quality policy. **Unknown:** data or quality metadata is not available/assessed.
@@ -35,17 +35,17 @@ Use the domain definitions in [DOMAIN_MODEL.md](DOMAIN_MODEL.md); do not introdu
 
 ## Shared-file and parallel-work rules
 
-- The semantic source of truth for the first workflow is `docs/DATA_CONTRACTS.md` until a machine-readable contract is explicitly selected. Do not independently redefine response shapes in frontend and backend notes.
-- Coordinate changes to `docs/DATA_CONTRACTS.md`, `docs/DOMAIN_MODEL.md`, shared fixtures, and CI with all affected developers before editing. One person should own each implementation file set; the team agrees one contract editor/reviewer before implementation.
-- Frontend and scientific developers may work independently against the approved contract and synthetic fixtures. Backend owns orchestration and API serialization; it does not own science algorithms.
-- If an unresolved product/data fact affects shape or behavior, record it as open and stop dependent implementation rather than guessing.
+- `contracts/multisensor-response.schema.json` and `contracts/api-error.schema.json` are the canonical wire contracts. `docs/DATA_CONTRACTS.md` explains their semantics; it is not a second payload definition.
+- Coordinate changes to `contracts/`, shared fixtures, validator, `docs/DATA_CONTRACTS.md`, and CI with all affected developers. Assign a contract editor/reviewer; one person owns each implementation file set.
+- Frontend may build against the shared fixtures. Backend owns request validation, orchestration, and API serialization; it does not own science algorithms. Scientific developers keep product-specific result semantics in the science layer.
+- If an unresolved product/data fact affects shape or behavior, retain explicit null/limitation where supported and stop only the dependent claim or implementation rather than guessing.
 
 ## Role ownership for the first workflow
 
 - **Frontend/UX developer:** owns `frontend/`, user interaction and presentation, and contract-derived client types/mocks. Reviews any contract field the UI consumes.
-- **Backend/application developer:** owns backend API/application code, request validation, orchestration, and serialization. Coordinates the first machine-readable HTTP contract if an API is approved.
+- **Backend/application developer:** owns backend API/application code, request validation, orchestration, and schema-compliant serialization.
 - **Scientific/Earth-observation developer:** owns approved source inspection/adapters and science calculations, quality evaluation, and processing provenance. Reviews whether contract fields and status semantics are scientifically supportable.
-- **Shared:** all three review `DOMAIN_MODEL.md` and `DATA_CONTRACTS.md`; the team appoints a contract editor before parallel implementation. A single role does not unilaterally decide science meaning or consumer behavior.
+- **Shared:** all three review schema and fixture changes and approve contract evolution. The contract editor owns the schema files; no single role unilaterally decides measurement meaning or consumer behavior.
 
 ## Decisions and conflict resolution
 

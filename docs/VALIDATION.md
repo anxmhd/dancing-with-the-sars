@@ -2,9 +2,9 @@
 
 ## Foundation checks
 
-The current code has a frontend identity shell and a backend API foundation. Automated checks verify application startup, endpoint behavior, request validation, error responses, empty states, mock-provider integration, and OpenAPI/application consistency against synthetic fixtures. They do not validate remote sensing methods or scientific conclusions.
+The code has a frontend identity shell, Python package foundation, a provisional per-acquisition NDVI processor, Sentinel-2 and Sentinel-1 RTC product readers, and a NISAR GCOV HDF5 reader tested against an actual local product. Deterministic tests use synthetic raster/HDF5 fixtures for reader windows, units, nodata, masks, and parcel summaries; they verify software behavior only. The actual NISAR product was read and summarized, but its source focus masks reject every selected-parcel candidate, so there is no accepted numeric parcel value. Software tests and successful file reading do not establish scientific validation; see [the product report](NISAR_GCOV_PRODUCT_VALIDATION.md).
 
-Run checks as described in [the README](../README.md). CI runs Python tests and linting plus frontend type checking, tests, and a production build.
+Run checks as described in [the README](../README.md). CI runs Python tests, linting, and the JSON Schema/fixture validator, plus frontend type checking, tests, and a production build.
 
 ## Future software testing
 
@@ -12,6 +12,8 @@ Use deterministic, small fixtures. Add unit, integration, API-contract, and end-
 
 ## Scientific validation
 
-For each approved method, define domain-specific acceptance criteria before claiming validation. Examples include known-value checks for indices and unit conversions; CRS and spatial-intersection checks; nodata/cloud-mask behavior; temporal aggregation; and comparison against independent reference information where available.
+The supplied Figshare parcel and NDVI archives were inspected for file structure and metadata, not integrated into the application. The initial real-data outputs in [the result report](FIRST_REAL_MULTISENSOR_RESULT.md) have not been compared with an independent implementation or field measurements. Before marking either method scientifically validated, review the provisional product-specific QA/aggregation choices, compare parcel masks and values against an independent trusted reference with stated tolerances, and obtain relevant field evidence. Do not use the supplied NDVI CSVs as ground truth until their provenance and repeated same-date records are resolved.
+
+For each result, retain the exact source/product and acquisition, product metadata, units/scaling, spatial and temporal resolution, preprocessing/quality rules, provenance, missingness, uncertainty, and limitations. Report interpretation separately from measured/derived values. Synthetic tests and agreement between datasets do not by themselves establish scientific validity. Do not imply stress, irrigation, drought effects, or groundwater conditions from NDVI alone; do not equate SAR backscatter with soil moisture or stress. For Sentinel-1/NISAR comparisons, justify compatibility across frequency, polarization, acquisition geometry/date, resolution, processing level, and quantity before calculating comparative statistics. Otherwise, report the observations separately and state their limits.
 
 Track software state separately: `IMPLEMENTED`, `TESTED`, and `VALIDATED` mean different things. A passing software suite alone does not validate scientific methods or findings.

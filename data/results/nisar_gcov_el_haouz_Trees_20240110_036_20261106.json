@@ -1,0 +1,379 @@
+{
+  "artifactType": "scientificParcelSummary",
+  "artifactVersion": "1.0",
+  "parcelId": "el haouz_Trees_20240110_036",
+  "status": "noValidMeasurements",
+  "observation": {
+    "acquiredAt": "2026-11-06T19:20:31.000000000Z",
+    "observationDate": "2026-11-06",
+    "mission": "NISAR",
+    "platform": "NISAR",
+    "instrument": "LSAR",
+    "sensorDetails": {
+      "radarBand": "L",
+      "orbitPassDirection": "Descending",
+      "lookDirection": "Left",
+      "trackNumber": 23,
+      "absoluteOrbitNumber": 6696,
+      "productFrequencies": [
+        "A",
+        "B"
+      ]
+    },
+    "source": {
+      "catalogProvider": "Not recorded in the supplied local HDF5 product",
+      "dataset": "NISAR Level-2 Geocoded Polarimetric Covariance (GCOV)",
+      "collectionId": null,
+      "catalogItemId": null,
+      "catalogUrl": null,
+      "sourceProductIdentifier": "NISAR_L2_PR_GCOV_035_023_D_073_2005_DHDH_M_20261106T192031_20261106T192107_P05036_N_F_J_001",
+      "productUri": null,
+      "processingVersion": "1.0.20",
+      "processingDateTime": "2026-11-12T04:39:52Z",
+      "productType": "GCOV",
+      "processingLevel": "L2",
+      "assetSource": {
+        "provider": "User-supplied local HDF5 product; path omitted",
+        "collectionId": null,
+        "itemId": "NISAR_L2_PR_GCOV_035_023_D_073_2005_DHDH_M_20261106T192031_20261106T192107_P05036_N_F_J_001"
+      },
+      "sourceProcessingNote": "The exact catalog record and download URL were not retained with the local file; source identity is verified from its internal granuleId.",
+      "productMetadata": {
+        "granuleId": "NISAR_L2_PR_GCOV_035_023_D_073_2005_DHDH_M_20261106T192031_20261106T192107_P05036_N_F_J_001",
+        "platformName": "NISAR",
+        "instrumentName": "LSAR",
+        "productType": "GCOV",
+        "productLevel": "L2",
+        "productVersion": "1.0.20",
+        "productSpecificationVersion": "1.6.0",
+        "processingDateTime": "2026-11-12T04:39:52",
+        "processingType": "Nominal",
+        "processingCenter": "JPL",
+        "compositeReleaseId": "P05036",
+        "radarBand": "L",
+        "zeroDopplerStartTime": "2026-11-06T19:20:31.000000000",
+        "zeroDopplerEndTime": "2026-11-06T19:21:07.999342105",
+        "orbitPassDirection": "Descending",
+        "lookDirection": "Left",
+        "trackNumber": 23,
+        "absoluteOrbitNumber": 6696,
+        "listOfFrequencies": [
+          "A",
+          "B"
+        ],
+        "listOfObservationModes": [
+          "(NOT SPECIFIED)"
+        ],
+        "isFullFrame": "True",
+        "frameNumber": 73,
+        "hasInputDataException": 0,
+        "productDoi": "10.5067/NIL2GCOV-V1"
+      }
+    },
+    "measurements": [
+      {
+        "quantity": "gamma0BackscatterCoefficient",
+        "polarization": "HH",
+        "frequency": "A",
+        "covarianceTerm": "HHHH",
+        "representation": "linearPower",
+        "value": null,
+        "unit": "1",
+        "unitStatus": "definedByQuantity",
+        "statistic": "median",
+        "grid": {
+          "crs": "EPSG:32629",
+          "resolution": [
+            20.0,
+            20.0
+          ],
+          "resolutionUnit": "m",
+          "transformGdal": [
+            623080.0,
+            20.0,
+            0.0,
+            3503680.0,
+            0.0,
+            -20.0
+          ]
+        },
+        "quality": {
+          "status": "excluded",
+          "flags": [
+            "gcovMaskNotFullyFocusedOrOutside",
+            "channelFullyFocusedValidityBitNotSet"
+          ],
+          "reasons": [
+            "No parcel pixel passed the declared GCOV validity rules."
+          ],
+          "validPixelCount": 0,
+          "totalPixelCount": 6,
+          "validPixelFraction": 0.0,
+          "excludedPixelCount": 6,
+          "excludedByGcovMaskCount": 6,
+          "excludedByChannelFocusBitCount": 6,
+          "excludedBySampleSlipCount": 0,
+          "gcovMaskValueCounts": {
+            "0": 6
+          },
+          "inputDataExceptionMaskValueCounts": {
+            "0": 6
+          }
+        },
+        "processing": {
+          "geometryCrs": "EPSG:4326",
+          "pixelInclusion": "pixel center",
+          "qualityRule": "Finite, nonnegative values not equal to the declared fill value; GCOV mask 0 (not fully focused/invalid) and 255 (outside acquisition) excluded; when present, the channel focus-validity bit must be set and sample-slip flag 2 absent.",
+          "validityBit": 256,
+          "fillValueHandling": "Dataset _FillValue metadata used; HDF5 storage fillvalue is not treated as nodata.",
+          "interpretationLimit": "Gamma-zero backscatter depends on surface, vegetation, roughness, polarization, frequency, geometry and processing; it is not a direct soil-moisture or vegetation-stress measurement.",
+          "method": "median parcel-center value from one diagonal GCOV covariance layer",
+          "sourceLayer": "/science/LSAR/GCOV/grids/frequencyA/HHHH",
+          "covarianceDescription": "Covariance between HH and HH",
+          "sourceUnits": "1",
+          "sourceDataType": "float32",
+          "sourceFillValue": null,
+          "sourceFillValueIsNaN": true,
+          "numberOfLooksWithinCandidatePixels": {
+            "minimum": 9.922889709472656,
+            "median": 10.017119407653809,
+            "maximum": 10.148557662963867
+          },
+          "centerFrequencyHz": 1229000000.0,
+          "processedRangeBandwidthHz": 20000000.0,
+          "gcovMaskDescription": "Mask indicating the subswath number associated with valid GCOV samples. A GCOV sample is only considered valid if it is generated from fully-focused radar samples. If at least one radar sample in the averaging set is partially focused or invalid, the corresponding mask pixel will contain the value 0. GCOV pixels outside of the radar acquisition extent are filled with the value 255",
+          "inputDataExceptionMaskDescription": "Bitwise OR of input data exception codes for each image pixel (0: no anomaly, 2: NISAR LSAR qFSP-H1 sample slip). Also includes OR of validity mask bits, where each bit is set on for fully-focused data or off for partially focused or missing data (256:HH, 512:HV, 1024:VH, 2048:VV, 4096:LH, 8192:LV, 16384:RH, 32768:RV)"
+        }
+      },
+      {
+        "quantity": "gamma0BackscatterCoefficient",
+        "polarization": "HV",
+        "frequency": "A",
+        "covarianceTerm": "HVHV",
+        "representation": "linearPower",
+        "value": null,
+        "unit": "1",
+        "unitStatus": "definedByQuantity",
+        "statistic": "median",
+        "grid": {
+          "crs": "EPSG:32629",
+          "resolution": [
+            20.0,
+            20.0
+          ],
+          "resolutionUnit": "m",
+          "transformGdal": [
+            623080.0,
+            20.0,
+            0.0,
+            3503680.0,
+            0.0,
+            -20.0
+          ]
+        },
+        "quality": {
+          "status": "excluded",
+          "flags": [
+            "gcovMaskNotFullyFocusedOrOutside",
+            "channelFullyFocusedValidityBitNotSet"
+          ],
+          "reasons": [
+            "No parcel pixel passed the declared GCOV validity rules."
+          ],
+          "validPixelCount": 0,
+          "totalPixelCount": 6,
+          "validPixelFraction": 0.0,
+          "excludedPixelCount": 6,
+          "excludedByGcovMaskCount": 6,
+          "excludedByChannelFocusBitCount": 6,
+          "excludedBySampleSlipCount": 0,
+          "gcovMaskValueCounts": {
+            "0": 6
+          },
+          "inputDataExceptionMaskValueCounts": {
+            "0": 6
+          }
+        },
+        "processing": {
+          "geometryCrs": "EPSG:4326",
+          "pixelInclusion": "pixel center",
+          "qualityRule": "Finite, nonnegative values not equal to the declared fill value; GCOV mask 0 (not fully focused/invalid) and 255 (outside acquisition) excluded; when present, the channel focus-validity bit must be set and sample-slip flag 2 absent.",
+          "validityBit": 512,
+          "fillValueHandling": "Dataset _FillValue metadata used; HDF5 storage fillvalue is not treated as nodata.",
+          "interpretationLimit": "Gamma-zero backscatter depends on surface, vegetation, roughness, polarization, frequency, geometry and processing; it is not a direct soil-moisture or vegetation-stress measurement.",
+          "method": "median parcel-center value from one diagonal GCOV covariance layer",
+          "sourceLayer": "/science/LSAR/GCOV/grids/frequencyA/HVHV",
+          "covarianceDescription": "Covariance between HV and HV",
+          "sourceUnits": "1",
+          "sourceDataType": "float32",
+          "sourceFillValue": null,
+          "sourceFillValueIsNaN": true,
+          "numberOfLooksWithinCandidatePixels": {
+            "minimum": 9.922889709472656,
+            "median": 10.017119407653809,
+            "maximum": 10.148557662963867
+          },
+          "centerFrequencyHz": 1229000000.0,
+          "processedRangeBandwidthHz": 20000000.0,
+          "gcovMaskDescription": "Mask indicating the subswath number associated with valid GCOV samples. A GCOV sample is only considered valid if it is generated from fully-focused radar samples. If at least one radar sample in the averaging set is partially focused or invalid, the corresponding mask pixel will contain the value 0. GCOV pixels outside of the radar acquisition extent are filled with the value 255",
+          "inputDataExceptionMaskDescription": "Bitwise OR of input data exception codes for each image pixel (0: no anomaly, 2: NISAR LSAR qFSP-H1 sample slip). Also includes OR of validity mask bits, where each bit is set on for fully-focused data or off for partially focused or missing data (256:HH, 512:HV, 1024:VH, 2048:VV, 4096:LH, 8192:LV, 16384:RH, 32768:RV)"
+        }
+      },
+      {
+        "quantity": "gamma0BackscatterCoefficient",
+        "polarization": "HH",
+        "frequency": "B",
+        "covarianceTerm": "HHHH",
+        "representation": "linearPower",
+        "value": null,
+        "unit": "1",
+        "unitStatus": "definedByQuantity",
+        "statistic": "median",
+        "grid": {
+          "crs": "EPSG:32629",
+          "resolution": [
+            80.0,
+            80.0
+          ],
+          "resolutionUnit": "m",
+          "transformGdal": [
+            623040.0,
+            80.0,
+            0.0,
+            3503680.0,
+            0.0,
+            -80.0
+          ]
+        },
+        "quality": {
+          "status": "excluded",
+          "flags": [
+            "gcovMaskNotFullyFocusedOrOutside",
+            "channelFullyFocusedValidityBitNotSet"
+          ],
+          "reasons": [
+            "No parcel pixel passed the declared GCOV validity rules."
+          ],
+          "validPixelCount": 0,
+          "totalPixelCount": 1,
+          "validPixelFraction": 0.0,
+          "excludedPixelCount": 1,
+          "excludedByGcovMaskCount": 1,
+          "excludedByChannelFocusBitCount": 1,
+          "excludedBySampleSlipCount": 0,
+          "gcovMaskValueCounts": {
+            "0": 1
+          },
+          "inputDataExceptionMaskValueCounts": {
+            "0": 1
+          }
+        },
+        "processing": {
+          "geometryCrs": "EPSG:4326",
+          "pixelInclusion": "pixel center",
+          "qualityRule": "Finite, nonnegative values not equal to the declared fill value; GCOV mask 0 (not fully focused/invalid) and 255 (outside acquisition) excluded; when present, the channel focus-validity bit must be set and sample-slip flag 2 absent.",
+          "validityBit": 256,
+          "fillValueHandling": "Dataset _FillValue metadata used; HDF5 storage fillvalue is not treated as nodata.",
+          "interpretationLimit": "Gamma-zero backscatter depends on surface, vegetation, roughness, polarization, frequency, geometry and processing; it is not a direct soil-moisture or vegetation-stress measurement.",
+          "method": "median parcel-center value from one diagonal GCOV covariance layer",
+          "sourceLayer": "/science/LSAR/GCOV/grids/frequencyB/HHHH",
+          "covarianceDescription": "Covariance between HH and HH",
+          "sourceUnits": "1",
+          "sourceDataType": "float32",
+          "sourceFillValue": null,
+          "sourceFillValueIsNaN": true,
+          "numberOfLooksWithinCandidatePixels": {
+            "minimum": 40.28678894042969,
+            "median": 40.28678894042969,
+            "maximum": 40.28678894042969
+          },
+          "centerFrequencyHz": 1293500000.0,
+          "processedRangeBandwidthHz": 5000000.0,
+          "gcovMaskDescription": "Mask indicating the subswath number associated with valid GCOV samples. A GCOV sample is only considered valid if it is generated from fully-focused radar samples. If at least one radar sample in the averaging set is partially focused or invalid, the corresponding mask pixel will contain the value 0. GCOV pixels outside of the radar acquisition extent are filled with the value 255",
+          "inputDataExceptionMaskDescription": "Bitwise OR of input data exception codes for each image pixel (0: no anomaly, 2: NISAR LSAR qFSP-H1 sample slip). Also includes OR of validity mask bits, where each bit is set on for fully-focused data or off for partially focused or missing data (256:HH, 512:HV, 1024:VH, 2048:VV, 4096:LH, 8192:LV, 16384:RH, 32768:RV)"
+        }
+      },
+      {
+        "quantity": "gamma0BackscatterCoefficient",
+        "polarization": "HV",
+        "frequency": "B",
+        "covarianceTerm": "HVHV",
+        "representation": "linearPower",
+        "value": null,
+        "unit": "1",
+        "unitStatus": "definedByQuantity",
+        "statistic": "median",
+        "grid": {
+          "crs": "EPSG:32629",
+          "resolution": [
+            80.0,
+            80.0
+          ],
+          "resolutionUnit": "m",
+          "transformGdal": [
+            623040.0,
+            80.0,
+            0.0,
+            3503680.0,
+            0.0,
+            -80.0
+          ]
+        },
+        "quality": {
+          "status": "excluded",
+          "flags": [
+            "gcovMaskNotFullyFocusedOrOutside",
+            "channelFullyFocusedValidityBitNotSet"
+          ],
+          "reasons": [
+            "No parcel pixel passed the declared GCOV validity rules."
+          ],
+          "validPixelCount": 0,
+          "totalPixelCount": 1,
+          "validPixelFraction": 0.0,
+          "excludedPixelCount": 1,
+          "excludedByGcovMaskCount": 1,
+          "excludedByChannelFocusBitCount": 1,
+          "excludedBySampleSlipCount": 0,
+          "gcovMaskValueCounts": {
+            "0": 1
+          },
+          "inputDataExceptionMaskValueCounts": {
+            "0": 1
+          }
+        },
+        "processing": {
+          "geometryCrs": "EPSG:4326",
+          "pixelInclusion": "pixel center",
+          "qualityRule": "Finite, nonnegative values not equal to the declared fill value; GCOV mask 0 (not fully focused/invalid) and 255 (outside acquisition) excluded; when present, the channel focus-validity bit must be set and sample-slip flag 2 absent.",
+          "validityBit": 512,
+          "fillValueHandling": "Dataset _FillValue metadata used; HDF5 storage fillvalue is not treated as nodata.",
+          "interpretationLimit": "Gamma-zero backscatter depends on surface, vegetation, roughness, polarization, frequency, geometry and processing; it is not a direct soil-moisture or vegetation-stress measurement.",
+          "method": "median parcel-center value from one diagonal GCOV covariance layer",
+          "sourceLayer": "/science/LSAR/GCOV/grids/frequencyB/HVHV",
+          "covarianceDescription": "Covariance between HV and HV",
+          "sourceUnits": "1",
+          "sourceDataType": "float32",
+          "sourceFillValue": null,
+          "sourceFillValueIsNaN": true,
+          "numberOfLooksWithinCandidatePixels": {
+            "minimum": 40.28678894042969,
+            "median": 40.28678894042969,
+            "maximum": 40.28678894042969
+          },
+          "centerFrequencyHz": 1293500000.0,
+          "processedRangeBandwidthHz": 5000000.0,
+          "gcovMaskDescription": "Mask indicating the subswath number associated with valid GCOV samples. A GCOV sample is only considered valid if it is generated from fully-focused radar samples. If at least one radar sample in the averaging set is partially focused or invalid, the corresponding mask pixel will contain the value 0. GCOV pixels outside of the radar acquisition extent are filled with the value 255",
+          "inputDataExceptionMaskDescription": "Bitwise OR of input data exception codes for each image pixel (0: no anomaly, 2: NISAR LSAR qFSP-H1 sample slip). Also includes OR of validity mask bits, where each bit is set on for fully-focused data or off for partially focused or missing data (256:HH, 512:HV, 1024:VH, 2048:VV, 4096:LH, 8192:LV, 16384:RH, 32768:RV)"
+        }
+      }
+    ],
+    "limitations": [
+      "The source masks reject every candidate parcel pixel for this granule, so no accepted parcel-level value is available.",
+      "The product records gamma-zero power in unit 1. It is not a direct soil-moisture or vegetation-stress measurement.",
+      "Frequency A and B are distinct NISAR acquisition channels with different center frequencies and output grid spacings; their values are not interchangeable.",
+      "NISAR must not be numerically compared with Sentinel-1 C-band without accounting for frequency, polarization, geometry, dates, resolution and processing.",
+      "The exact catalog record and download URL were not preserved by the local download workflow."
+    ]
+  }
+}

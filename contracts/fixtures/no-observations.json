@@ -1,0 +1,25 @@
+{
+  "contractVersion": "1.0",
+  "parcelId": "el haouz_Trees_20240110_036",
+  "query": {
+    "startDate": "2025-01-01",
+    "endDate": "2025-01-31",
+    "requestedMissions": [
+      "Sentinel-2",
+      "NISAR"
+    ]
+  },
+  "sensorResults": [
+    {
+      "mission": "Sentinel-2",
+      "status": "noObservations",
+      "observationCount": 0
+    },
+    {
+      "mission": "NISAR",
+      "status": "noObservations",
+      "observationCount": 0
+    }
+  ],
+  "observations": []
+}

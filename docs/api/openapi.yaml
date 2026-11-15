@@ -1,0 +1,184 @@
+openapi: 3.1.0
+info:
+  title: Dancing with the SARs API
+  description: 'Backend API for Dancing with the SARs: parcel discovery and multisensor
+    observations.'
+  version: 0.1.0
+paths:
+  /api/v1/health:
+    get:
+      tags:
+      - system
+      summary: Report backend service status
+      description: 'Report liveness and the configured science provider.
+
+
+        This endpoint does not check external data sources or scientific validity.'
+      operationId: getHealth
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /api/v1/parcels/{parcelId}:
+    get:
+      tags:
+      - parcels
+      summary: Retrieve one parcel as a GeoJSON Feature
+      operationId: getParcel
+      parameters:
+      - name: parcelId
+        in: path
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 200
+          title: Parcelid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Getparcel
+        '400':
+          description: Invalid request.
+        '404':
+          description: Unknown parcel.
+        '500':
+          description: Internal server error.
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/parcels/{parcelId}/observations:
+    get:
+      tags:
+      - parcels
+      summary: Retrieve parcel observations for a date range and missions
+      operationId: getParcelObservations
+      parameters:
+      - name: parcelId
+        in: path
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 200
+          title: Parcelid
+      - name: startDate
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+          title: Startdate
+      - name: endDate
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+          title: Enddate
+      - name: missions
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          title: Missions
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Getparcelobservations
+        '400':
+          description: Invalid request.
+        '404':
+          description: Unknown parcel.
+        '500':
+          description: Internal server error.
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    HealthResponse:
+      properties:
+        status:
+          type: string
+          const: ok
+          title: Status
+          description: Service availability.
+        service:
+          type: string
+          title: Service
+          description: Service identifier.
+        version:
+          type: string
+          title: Version
+          description: Backend package version.
+        scienceProvider:
+          type: string
+          title: Scienceprovider
+          description: Science provider currently wired behind the application/science
+            interface.
+      type: object
+      required:
+      - status
+      - service
+      - version
+      - scienceProvider
+      title: HealthResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError

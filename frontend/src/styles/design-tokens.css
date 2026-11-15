@@ -1,0 +1,152 @@
+/* ================================================================
+   Design Tokens — Dancing with the SARs
+   Professional scientific palette with earthy greens and warm amber.
+   ================================================================ */
+
+:root {
+  /* ===== Primary — Forest Green ===== */
+  --color-primary-50: hsl(155, 30%, 95%);
+  --color-primary-100: hsl(155, 32%, 87%);
+  --color-primary-200: hsl(155, 34%, 74%);
+  --color-primary-300: hsl(155, 36%, 55%);
+  --color-primary-400: hsl(155, 40%, 40%);
+  --color-primary-500: hsl(155, 44%, 30%);
+  --color-primary-600: hsl(155, 48%, 24%);
+  --color-primary-700: hsl(155, 50%, 18%);
+  --color-primary-800: hsl(155, 52%, 13%);
+  --color-primary-900: hsl(155, 54%, 8%);
+
+  /* ===== Accent — Warm Amber ===== */
+  --color-accent-50: hsl(38, 92%, 95%);
+  --color-accent-100: hsl(38, 90%, 87%);
+  --color-accent-200: hsl(38, 85%, 74%);
+  --color-accent-300: hsl(38, 82%, 62%);
+  --color-accent-400: hsl(38, 88%, 52%);
+  --color-accent-500: hsl(38, 92%, 45%);
+  --color-accent-600: hsl(34, 90%, 38%);
+  --color-accent-700: hsl(30, 85%, 30%);
+
+  /* ===== Neutral — Stone ===== */
+  --color-neutral-50: hsl(40, 15%, 97%);
+  --color-neutral-100: hsl(40, 12%, 94%);
+  --color-neutral-200: hsl(40, 10%, 88%);
+  --color-neutral-300: hsl(38, 8%, 78%);
+  --color-neutral-400: hsl(36, 5%, 60%);
+  --color-neutral-500: hsl(34, 4%, 46%);
+  --color-neutral-600: hsl(30, 5%, 35%);
+  --color-neutral-700: hsl(220, 10%, 25%);
+  --color-neutral-800: hsl(220, 14%, 18%);
+  --color-neutral-900: hsl(220, 18%, 12%);
+
+  /* ===== Semantic ===== */
+  --color-success: hsl(155, 50%, 36%);
+  --color-success-light: hsl(155, 40%, 93%);
+  --color-warning: hsl(38, 92%, 50%);
+  --color-warning-light: hsl(38, 88%, 93%);
+  --color-error: hsl(0, 72%, 51%);
+  --color-error-light: hsl(0, 68%, 95%);
+  --color-info: hsl(205, 72%, 48%);
+  --color-info-light: hsl(205, 68%, 94%);
+
+  /* ===== Surfaces ===== */
+  --color-bg: var(--color-neutral-50);
+  --color-surface: #ffffff;
+  --color-surface-raised: #ffffff;
+  --color-surface-overlay: rgba(0, 0, 0, 0.45);
+
+  /* ===== Sidebar ===== */
+  --color-sidebar-bg: hsl(215, 32%, 14%);
+  --color-sidebar-text: hsl(215, 15%, 72%);
+  --color-sidebar-text-active: #ffffff;
+  --color-sidebar-hover: hsl(215, 28%, 19%);
+  --color-sidebar-active: var(--color-primary-500);
+  --color-sidebar-border: hsl(215, 25%, 22%);
+
+  /* ===== Text ===== */
+  --color-text-primary: hsl(220, 16%, 16%);
+  --color-text-secondary: hsl(220, 8%, 46%);
+  --color-text-tertiary: hsl(220, 6%, 62%);
+  --color-text-inverse: #ffffff;
+  --color-text-link: var(--color-primary-500);
+  --color-text-link-hover: var(--color-primary-600);
+
+  /* ===== Borders ===== */
+  --color-border: var(--color-neutral-200);
+  --color-border-light: var(--color-neutral-100);
+  --color-border-focus: var(--color-primary-400);
+
+  /* ===== Typography ===== */
+  --font-family: "Inter", system-ui, -apple-system, sans-serif;
+  --font-family-mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+
+  --text-xs: 0.75rem;     /* 12px */
+  --text-sm: 0.875rem;    /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg: 1.125rem;    /* 18px */
+  --text-xl: 1.25rem;     /* 20px */
+  --text-2xl: 1.5rem;     /* 24px */
+  --text-3xl: 1.875rem;   /* 30px */
+  --text-4xl: 2.25rem;    /* 36px */
+  --text-5xl: 3rem;       /* 48px */
+
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.75;
+
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.025em;
+
+  /* ===== Spacing (4px base) ===== */
+  --space-0: 0;
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  --space-20: 5rem;     /* 80px */
+  --space-24: 6rem;     /* 96px */
+
+  /* ===== Border Radius ===== */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* ===== Shadows ===== */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.07), 0 4px 6px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.08), 0 8px 10px rgba(0, 0, 0, 0.04);
+
+  /* ===== Transitions ===== */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 350ms ease;
+
+  /* ===== Layout ===== */
+  --sidebar-width: 260px;
+  --sidebar-collapsed-width: 68px;
+  --header-height: 64px;
+  --content-max-width: 1200px;
+
+  /* ===== Z-Index Scale ===== */
+  --z-sidebar: 100;
+  --z-header: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+}

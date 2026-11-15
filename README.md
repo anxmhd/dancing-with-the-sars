@@ -4,14 +4,14 @@ Monitoring agricultural dynamics and climate-related vegetation stress in Morocc
 
 ## Project status
 
-The repository contains the approved foundation and reproducible command-line workflows for one real Sentinel-2 L2A, one Sentinel-1 RTC, and one locally supplied NISAR GCOV product. NISAR was read, but the selected parcel's candidate pixels fail the product focus masks; no numeric parcel value is available. The shared version 1.0 multisensor response schema and fixtures are ready for backend/frontend integration. There are no API routes or interactive analysis features, and software-tested observations are not independently scientifically validated. See [the implementation handoff](docs/IMPLEMENTATION_GUIDE.md), [NISAR product validation](docs/NISAR_GCOV_PRODUCT_VALIDATION.md), [project status](docs/STATUS.md), and [the roadmap](docs/ROADMAP.md).
+The repository contains the approved foundation and reproducible command-line workflows for one real Sentinel-2 L2A, one Sentinel-1 RTC, and one locally supplied NISAR GCOV product. NISAR was read, but the selected parcel's candidate pixels fail the product focus masks; no numeric parcel value is available. The shared version 1.0 multisensor response schema and fixtures are implemented by the backend API (`/api/v1/parcels/{parcelId}` and `/api/v1/parcels/{parcelId}/observations`), and the frontend still renders a small project identity shell only. Software-tested observations are not independently scientifically validated. See [the implementation handoff](docs/IMPLEMENTATION_GUIDE.md), [NISAR product validation](docs/NISAR_GCOV_PRODUCT_VALIDATION.md), [project status](docs/STATUS.md), [the roadmap](docs/ROADMAP.md), and [the backend handoff](docs/BACKEND_HANDOFF.md).
 
 ## Technology
 
 - Frontend: React, TypeScript, Vite, and Vitest.
 - Backend/scientific package: Python, NumPy, Rasterio, Shapely, and h5py; managed with uv, with Pytest and Ruff as development tools.
 - Mapping library: Leaflet is the initial choice for future study-area and parcel layers. It is not installed until map work is approved.
-- API framework: FastAPI is the selected backend direction, deferred until an actual API requirement exists.
+- API framework: FastAPI backend is implemented and exposes parcel discovery and multisensor observations.
 
 The dependency set includes the geospatial/HDF5 libraries used by the scientific workflows and `jsonschema` as a development-only dependency for the shared contract validator. No database or application cloud service is included.
 
@@ -30,6 +30,13 @@ Backend terminal:
 ```powershell
 cd backend
 uv sync
+uv run uvicorn --factory dancing_with_sars.main:create_app --reload
+```
+
+In a second backend check terminal:
+
+```powershell
+cd backend
 uv run pytest
 uv run ruff check .
 uv run python ../scripts/validate_contract.py

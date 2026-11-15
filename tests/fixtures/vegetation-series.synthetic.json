@@ -1,0 +1,68 @@
+{
+  "parcelId": "synthetic-parcel-001",
+  "index": "NDVI",
+  "unit": "1",
+  "startDate": "2025-01-01",
+  "endDate": "2025-03-31",
+  "resultStatus": "available",
+  "observations": [
+    {
+      "observationId": "synthetic-vegetation-observation-001",
+      "acquisitionId": "synthetic-acquisition-001",
+      "acquiredAt": null,
+      "observationDate": "2025-01-15",
+      "value": 0.42,
+      "quality": {
+        "status": "accepted",
+        "flags": [],
+        "reasons": [],
+        "validPixelCount": null,
+        "totalPixelCount": null
+      }
+    },
+    {
+      "observationId": "synthetic-vegetation-observation-002",
+      "acquisitionId": "synthetic-acquisition-002",
+      "acquiredAt": null,
+      "observationDate": "2025-02-15",
+      "value": 0.51,
+      "quality": {
+        "status": "accepted",
+        "flags": [],
+        "reasons": [],
+        "validPixelCount": null,
+        "totalPixelCount": null
+      }
+    },
+    {
+      "observationId": "synthetic-vegetation-observation-003",
+      "acquisitionId": "synthetic-acquisition-003",
+      "acquiredAt": null,
+      "observationDate": "2025-03-15",
+      "value": null,
+      "quality": {
+        "status": "excluded",
+        "flags": [
+          "synthetic_flag"
+        ],
+        "reasons": [
+          "Synthetic exclusion for mock and demonstration purposes"
+        ],
+        "validPixelCount": null,
+        "totalPixelCount": null
+      }
+    }
+  ],
+  "provenance": {
+    "provider": "Synthetic source (mock science provider)",
+    "datasetName": "Synthetic dataset (not satellite data)",
+    "externalDatasetId": null,
+    "externalProductIds": null,
+    "externalAcquisitionIds": null,
+    "productVersion": null,
+    "processingSoftware": "synthetic-processor/0.1.0",
+    "processingMethod": "Synthetic NDVI aggregation (mock; not a scientific method)",
+    "processingParameters": {},
+    "processedAt": null
+  }
+}

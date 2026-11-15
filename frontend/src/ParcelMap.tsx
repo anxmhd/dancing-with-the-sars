@@ -1,7 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import type { GeoJSON as LeafletGeoJSON, Map as LeafletMap } from "leaflet";
+import type { GeoJSON as LeafletGeoJSON, Map as LeafletMap, TileLayer } from "leaflet";
 import type { Feature, FeatureCollection, Geometry } from "geojson";
 import type { ParcelFeatureCollection } from "./types";
+import {
+  DEFAULT_NISAR_DATE,
+  NISAR_AVAILABLE_DATES,
+  NISAR_GIBS_WMS_URL,
+  nisarWmsOptions,
+  type NisarDate,
+} from "./maps/nisarGibs";
 
 type Props = {
   parcels: ParcelFeatureCollection | null;
@@ -13,9 +20,14 @@ export function ParcelMap({ parcels, selectedParcelId, onSelect }: Props) {
   const elementRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<LeafletMap | null>(null);
   const tileLayerRef = useRef<any>(null);
+  const nisarLayerRef = useRef<TileLayer.WMS | null>(null);
   const layerRef = useRef<LeafletGeoJSON | null>(null);
   const [mapReady, setMapReady] = useState(false);
   const [basemap, setBasemap] = useState<"osm" | "satellite">("osm");
+  const [nisarEnabled, setNisarEnabled] = useState(true);
+  const [nisarDate, setNisarDate] = useState<NisarDate>(DEFAULT_NISAR_DATE);
+  const [nisarOpacity, setNisarOpacity] = useState(0.82);
+  const [nisarLayerError, setNisarLayerError] = useState(false);
   const selectedRef = useRef(selectedParcelId);
   const onSelectRef = useRef(onSelect);
 
@@ -83,6 +95,40 @@ export function ParcelMap({ parcels, selectedParcelId, onSelect }: Props) {
 
   useEffect(() => {
     const map = mapRef.current;
+    if (!map || !mapReady || !nisarEnabled) {
+      setNisarLayerError(false);
+      return;
+    }
+
+    let cancelled = false;
+    let layer: TileLayer.WMS | null = null;
+    const handleTileError = () => setNisarLayerError(true);
+    const handleTileLoad = () => setNisarLayerError(false);
+
+    void import("leaflet").then(({ default: L }) => {
+      if (cancelled || mapRef.current !== map) return;
+      layer = L.tileLayer.wms(
+        NISAR_GIBS_WMS_URL,
+        nisarWmsOptions(nisarDate, nisarOpacity),
+      );
+      layer.on("tileerror", handleTileError);
+      layer.on("tileload", handleTileLoad);
+      layer.addTo(map);
+      nisarLayerRef.current = layer;
+    });
+
+    return () => {
+      cancelled = true;
+      if (!layer) return;
+      layer.off("tileerror", handleTileError);
+      layer.off("tileload", handleTileLoad);
+      layer.remove();
+      if (nisarLayerRef.current === layer) nisarLayerRef.current = null;
+    };
+  }, [mapReady, nisarEnabled, nisarDate, nisarOpacity]);
+
+  useEffect(() => {
+    const map = mapRef.current;
     if (!map || !parcels || !mapReady) return;
     layerRef.current?.remove();
     const geoJson: FeatureCollection<Geometry> = {
@@ -125,15 +171,44 @@ export function ParcelMap({ parcels, selectedParcelId, onSelect }: Props) {
 
   return (
     <div className="map-wrapper">
-      <div className="basemap-switch" role="group" aria-label="Basemap selection">
-        <button type="button" className={basemap === "osm" ? "active" : ""} onClick={() => setBasemap("osm")}>Map</button>
-        <button type="button" className={basemap === "satellite" ? "active" : ""} onClick={() => setBasemap("satellite")}>Satellite</button>
+      <div className="map-layer-controls">
+        <div className="basemap-switch" role="group" aria-label="Basemap selection">
+          <button type="button" className={basemap === "osm" ? "active" : ""} onClick={() => setBasemap("osm")}>Map</button>
+          <button type="button" className={basemap === "satellite" ? "active" : ""} onClick={() => setBasemap("satellite")}>Satellite</button>
+        </div>
+        <label className="nisar-layer-toggle">
+          <input type="checkbox" checked={nisarEnabled} onChange={(event) => setNisarEnabled(event.target.checked)} />
+          <span>NISAR GCOV scan</span>
+        </label>
+        {nisarEnabled && (
+          <>
+            <label className="nisar-control-label">
+              Date
+              <select value={nisarDate} onChange={(event) => setNisarDate(event.target.value as NisarDate)}>
+                {NISAR_AVAILABLE_DATES.map((date) => (
+                  <option key={date} value={date}>{date === "2026-10-25" ? "25 Oct 2026" : "06 Nov 2026"}</option>
+                ))}
+              </select>
+            </label>
+            <label className="nisar-opacity-control">
+              Image opacity
+              <input type="range" min="0.2" max="1" step="0.05" value={nisarOpacity} onChange={(event) => setNisarOpacity(Number(event.target.value))} />
+            </label>
+          </>
+        )}
+        <p className="nisar-map-note">False-color regional mosaic; coverage is patchy and colors are contextual, not a parcel measurement.</p>
       </div>
-      <div className="map-legend" aria-label="Parcel legend">
+      <div className="map-legend" aria-label="Map legend">
         <span className="legend-swatch" />
-        <span>Source-backed parcel</span>
+        <span>Parcel</span>
+        {nisarEnabled && <><span className="nisar-legend-swatch" /><span>NISAR mosaic</span></>}
       </div>
       <div className="map-canvas" ref={elementRef} aria-label="Interactive map of available parcels" />
+      {nisarLayerError && (
+        <div className="map-layer-error" role="status">
+          NASA GIBS imagery could not be loaded. Parcel boundaries remain available.
+        </div>
+      )}
     </div>
   );
 }

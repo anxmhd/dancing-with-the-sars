@@ -6,9 +6,9 @@ import nisarFixture from "../../contracts/fixtures/nisar-quality-excluded.json";
 import partialFixture from "../../contracts/fixtures/partial-sensor-availability.json";
 import unavailableFixture from "../../contracts/fixtures/unavailable-source.json";
 import { fetchObservations } from "./api";
-import { App, ResultsPanel } from "./App";
+import { App, GuidedDemo, ResultsPanel } from "./App";
 import { ChartPanel } from "./charts";
-import { ndviSeries } from "./chartData";
+import { ndviSeries, sentinel1Series } from "./chartData";
 import type { ObservationResponse } from "./types";
 
 const asResponse = (value: unknown) => value as ObservationResponse;
@@ -105,5 +105,46 @@ describe("parcel observatory", () => {
     expect(markup).toContain("aria-label=\"Select NDVI,");
     expect(markup).toContain("Aug 14");
     expect(markup).toContain("Nov 6");
+  });
+
+  it("guides users through real points and states when a sensor point is unavailable", () => {
+    const observations = asResponse(availableFixture).observations;
+    const vegetationPoint = ndviSeries(observations)[0].points[0] ?? null;
+    const radarPoint = sentinel1Series(observations).find((series) => series.id === "vv")?.points.at(-1) ?? null;
+    const markup = renderToStaticMarkup(
+      <GuidedDemo
+        steps={[
+          {
+            id: "vegetation",
+            title: "Vegetation timeline",
+            measureLabel: "NDVI (unit 1)",
+            explanation: "NDVI is a vegetation index; by itself, it does not diagnose crop stress.",
+            point: vegetationPoint,
+          },
+          {
+            id: "sentinel-1",
+            title: "C-band radar context",
+            measureLabel: "Sentinel-1 VV median",
+            explanation: "Sentinel-1 backscatter is shown as linear power.",
+            point: radarPoint,
+          },
+          {
+            id: "nisar",
+            title: "NISAR snapshot",
+            measureLabel: "NISAR frequency A · HH",
+            explanation: "One acquisition date cannot show a trend.",
+            point: null,
+          },
+        ]}
+        selectedPointKey={null}
+        onSelect={() => undefined}
+        disabled={false}
+      />,
+    );
+    expect(markup).toContain("Vegetation timeline");
+    expect(markup).toContain("NDVI (unit 1) · ");
+    expect(markup).toContain("Sentinel-1 VV median · ");
+    expect(markup).toContain("NDVI is a vegetation index");
+    expect(markup).toContain("No accepted measurement for this step in the current selection.");
   });
 });

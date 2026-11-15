@@ -89,6 +89,68 @@ export function ResultsPanel({
   );
 }
 
+export type GuidedDemoStep = {
+  id: string;
+  title: string;
+  measureLabel: string;
+  explanation: string;
+  point: ChartPoint | null;
+};
+
+export function GuidedDemo({
+  steps,
+  selectedPointKey,
+  onSelect,
+  disabled,
+}: {
+  steps: GuidedDemoStep[];
+  selectedPointKey: string | null;
+  onSelect: (point: ChartPoint) => void;
+  disabled: boolean;
+}) {
+  return (
+    <section className="guided-demo" aria-labelledby="guided-demo-title">
+      <div className="guided-demo-heading">
+        <div>
+          <p className="eyebrow">A SHORT PARCEL WALKTHROUGH</p>
+          <h2 id="guided-demo-title">Follow the observations</h2>
+        </div>
+        <p>Choose a step to inspect a real chart point and its quality details.</p>
+      </div>
+      <div className="guided-demo-steps">
+        {steps.map((step, index) => (
+          <article className="guided-demo-step" key={step.id}>
+            <p className="guided-demo-index">0{index + 1} / {steps.length}</p>
+            <h3>{step.title}</h3>
+            <p className="guided-demo-explanation">{step.explanation}</p>
+            {step.point ? (
+              <button
+                type="button"
+                className="guided-demo-action"
+                aria-pressed={selectedPointKey === step.point.key}
+                disabled={disabled}
+                onClick={() => onSelect(step.point!)}
+              >
+                {step.measureLabel} · {step.point.observation.observationDate} · {step.point.value.toPrecision(4)} {step.point.measurement.unit}
+              </button>
+            ) : (
+              <p className="guided-demo-unavailable">No accepted measurement for this step in the current selection.</p>
+            )}
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function earliestPoint(points: ChartPoint[]): ChartPoint | null {
+  return [...points].sort((a, b) => a.observation.observationDate.localeCompare(b.observation.observationDate))[0] ?? null;
+}
+
+function latestPoint(points: ChartPoint[]): ChartPoint | null {
+  return [...points].sort((a, b) => a.observation.observationDate.localeCompare(b.observation.observationDate)).at(-1) ?? null;
+}
+
 export function App() {
   const [parcels, setParcels] = useState<ParcelFeatureCollection | null>(null);
   const [parcelError, setParcelError] = useState<string | null>(null);
@@ -158,6 +220,29 @@ export function App() {
   const s1ChartSeries = useMemo(() => sentinel1Series(observations), [observations]);
   const nisarASeries = useMemo(() => nisarSeries(observations, "A"), [observations]);
   const nisarBSeries = useMemo(() => nisarSeries(observations, "B"), [observations]);
+  const guidedSteps: GuidedDemoStep[] = [
+    {
+      id: "vegetation",
+      title: "Vegetation timeline",
+      measureLabel: "NDVI (unit 1)",
+      explanation: "NDVI is a vegetation index; by itself, it does not diagnose crop stress.",
+      point: earliestPoint(ndviChartSeries.flatMap((series) => series.points)),
+    },
+    {
+      id: "sentinel-1",
+      title: "C-band radar context",
+      measureLabel: "Sentinel-1 VV median",
+      explanation: "C-band backscatter is linear power (not dB) and is not a direct soil-moisture reading.",
+      point: latestPoint(s1ChartSeries.find((series) => series.id === "vv")?.points ?? []),
+    },
+    {
+      id: "nisar",
+      title: "NISAR snapshot",
+      measureLabel: "NISAR frequency A · HH",
+      explanation: "L-band backscatter is linear power; one NISAR date cannot show a time trend.",
+      point: earliestPoint(nisarASeries.find((series) => series.id === "nisar-A-hh")?.points ?? []),
+    },
+  ];
 
   function toggleMission(mission: string) {
     setSelectedMissions((current) => {
@@ -265,6 +350,13 @@ export function App() {
             <ResultsPanel loading={loading} error={error} response={response} />
           </div>
         </section>
+
+        <GuidedDemo
+          steps={guidedSteps}
+          selectedPointKey={selectedPoint?.key ?? null}
+          onSelect={setSelectedPoint}
+          disabled={loading}
+        />
 
         <section className="charts-section" aria-label="Time series">
           <div className="section-heading">

@@ -3,28 +3,21 @@ import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "./NisarRegionalMap.css";
-
-const WMS_URL =
-  "https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi";
-
-const NISAR_LAYER =
-  "NISAR_L2_Geocoded_Polarimetric_Covariance";
-
-// Only include dates that you have verified are useful for your area.
-const AVAILABLE_DATES = ["2026-11-06"];
-
-// NASA GIBS supports the WMS TIME parameter, which Leaflet's types omit.
-type DatedWmsOptions = L.WMSOptions & { time: string };
 type DatedWmsParams = L.WMSParams & { time: string };
+import {
+  DEFAULT_NISAR_DATE,
+  NISAR_AVAILABLE_DATES,
+  NISAR_GIBS_WMS_URL,
+  nisarWmsOptions,
+  type NisarDate,
+} from "./nisarGibs";
 
 export default function NisarRegionalMap() {
   const mapElement = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
   const nisarLayer = useRef<L.TileLayer.WMS | null>(null);
 
-  const [selectedDate, setSelectedDate] = useState(
-    AVAILABLE_DATES[0]
-  );
+  const [selectedDate, setSelectedDate] = useState<NisarDate>(DEFAULT_NISAR_DATE);
   const [layerError, setLayerError] = useState(false);
 
   // Initialize the map once.
@@ -47,16 +40,10 @@ export default function NisarRegionalMap() {
     }).addTo(map);
 
     // NASA NISAR GCOV visualization.
-    const nisarOptions: DatedWmsOptions = {
-      layers: NISAR_LAYER,
-      format: "image/png",
-      transparent: true,
-      version: "1.1.1",
-      time: selectedDate,
-      attribution:
-        'NASA NISAR / <a href="https://earthdata.nasa.gov/">NASA GIBS</a>',
-    };
-    const layer = L.tileLayer.wms(WMS_URL, nisarOptions);
+    const layer = L.tileLayer.wms(
+      NISAR_GIBS_WMS_URL,
+      nisarWmsOptions(selectedDate),
+    );
 
     layer.on("tileerror", () => setLayerError(true));
     layer.on("tileload", () => setLayerError(false));
@@ -106,9 +93,9 @@ export default function NisarRegionalMap() {
           Observation date
           <select
             value={selectedDate}
-            onChange={(event) => setSelectedDate(event.target.value)}
+            onChange={(event) => setSelectedDate(event.target.value as NisarDate)}
           >
-            {AVAILABLE_DATES.map((date) => (
+            {NISAR_AVAILABLE_DATES.map((date) => (
               <option key={date} value={date}>
                 {date}
               </option>

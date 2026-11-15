@@ -13,7 +13,7 @@ from rasterio.errors import WindowError
 from rasterio.features import geometry_window
 from rasterio.warp import transform_geom
 
-from dancing_with_sars.data_access._stac import get_json, signed_href
+from dancing_with_sars.data_access._stac import get_json, search_items, signed_href
 from dancing_with_sars.science.radar.sentinel1_rtc import Gamma0Band, summarize_gamma0_parcel
 
 STAC_URL = "https://planetarycomputer.microsoft.com/api/stac/v1"
@@ -121,6 +121,31 @@ def process_rtc_item(
             ),
         },
     }
+
+
+def search_sentinel1_items(
+    bbox: tuple[float, float, float, float],
+    start_date: str,
+    end_date: str,
+    *,
+    limit: int = 100,
+    orbit_state: str | None = None,
+) -> list[dict[str, Any]]:
+    """Discover Planetary Computer Sentinel-1 RTC items for a bounding box and date range."""
+    query: dict[str, Any] | None = None
+    if orbit_state:
+        query = {"sat:orbit_state": {"eq": orbit_state}}
+    features = search_items(
+        STAC_URL,
+        COLLECTION,
+        bbox,
+        start_date,
+        end_date,
+        limit=limit,
+        query=query,
+    )
+    features.sort(key=lambda item: item.get("properties", {}).get("datetime", ""))
+    return features
 
 
 def main() -> None:

@@ -21,7 +21,7 @@ from rasterio.errors import WindowError
 from rasterio.features import geometry_window
 from rasterio.warp import transform_geom
 
-from dancing_with_sars.data_access._stac import get_json, signed_href
+from dancing_with_sars.data_access._stac import get_json, search_items, signed_href
 from dancing_with_sars.science.vegetation.ndvi import (
     ProcessingPolicy,
     RasterBand,
@@ -217,6 +217,33 @@ def process_stac_item(
         },
         "observation": observation,
     }
+
+
+def search_sentinel2_items(
+    bbox: tuple[float, float, float, float],
+    start_date: str,
+    end_date: str,
+    *,
+    limit: int = 100,
+    max_cloud_cover: float = 100.0,
+) -> list[dict[str, Any]]:
+    """Discover Planetary Computer Sentinel-2 L2A items for a bounding box and date range."""
+    features = search_items(
+        PLANETARY_STAC,
+        SENTINEL2_COLLECTION,
+        bbox,
+        start_date,
+        end_date,
+        limit=limit,
+        query={"eo:cloud_cover": {"lte": max_cloud_cover}},
+    )
+    features.sort(
+        key=lambda item: (
+            item.get("properties", {}).get("eo:cloud_cover", 999),
+            item.get("properties", {}).get("datetime", ""),
+        )
+    )
+    return features
 
 
 def main() -> None:

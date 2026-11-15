@@ -1,0 +1,100 @@
+{
+  "status": "available",
+  "parcelId": "el haouz_Trees_20240110_036",
+  "source": {
+    "provider": "Microsoft Planetary Computer Sentinel-1 RTC collection",
+    "stacItem": "S1C_IW_GRDH_1SDV_20260908T062751_20260908T062816_009352_012999_rtc",
+    "catalogUrl": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-1-rtc/items/S1C_IW_GRDH_1SDV_20260908T062751_20260908T062816_009352_012999_rtc",
+    "platform": "sentinel-1c",
+    "acquiredAt": "2026-09-08T06:28:04.005498Z",
+    "productIdentifier": "S1C_IW_GRDH_1SDV_20260908T062751_20260908T062816_009352_012999_9CB5",
+    "processingDateTime": "2026-09-08T07:26:29.000000Z",
+    "productType": "GRD",
+    "processingLevel": "1",
+    "instrumentMode": "IW",
+    "frequencyBand": "C",
+    "centerFrequencyGHz": 5.405,
+    "polarizations": [
+      "VV",
+      "VH"
+    ],
+    "relativeOrbit": 154,
+    "orbitState": "descending",
+    "observationDirection": "right"
+  },
+  "measurement": {
+    "quantity": "terrain-corrected gamma-naught backscatter power",
+    "unit": "1",
+    "statistic": "median of finite, nonnegative parcel pixels in linear power",
+    "assetDetails": {
+      "VV": {
+        "productDescription": "Terrain-corrected gamma naught values of signal transmitted with vertical polarization and received with vertical polarization with radiometric terrain correction applied.",
+        "rasterMetadata": {
+          "nodata": -32768,
+          "data_type": "float32",
+          "spatial_resolution": 10
+        },
+        "unitStatus": "STAC omits unit, scale, and offset; values are summarized as stored gamma0 power, not dB.",
+        "summary": {
+          "crs": "EPSG:32629",
+          "resolutionM": [
+            10.0,
+            10.0
+          ],
+          "transform": [
+            623070.0,
+            10.0,
+            0.0,
+            3503690.0,
+            0.0,
+            -10.0
+          ],
+          "nodata": -32768.0,
+          "unit": "1",
+          "totalParcelPixels": 22,
+          "validPixelCount": 22,
+          "validPixelFraction": 1.0,
+          "medianGamma0Power": 0.09735032171010971,
+          "meanGamma0Power": 0.09850980595431545
+        }
+      },
+      "VH": {
+        "productDescription": "Terrain-corrected gamma naught values of signal transmitted with vertical polarization and received with horizontal polarization with radiometric terrain correction applied.",
+        "rasterMetadata": {
+          "nodata": -32768,
+          "data_type": "float32",
+          "spatial_resolution": 10
+        },
+        "unitStatus": "STAC omits unit, scale, and offset; values are summarized as stored gamma0 power, not dB.",
+        "summary": {
+          "crs": "EPSG:32629",
+          "resolutionM": [
+            10.0,
+            10.0
+          ],
+          "transform": [
+            623070.0,
+            10.0,
+            0.0,
+            3503690.0,
+            0.0,
+            -10.0
+          ],
+          "nodata": -32768.0,
+          "unit": "1",
+          "totalParcelPixels": 22,
+          "validPixelCount": 22,
+          "validPixelFraction": 1.0,
+          "medianGamma0Power": 0.020758564583957195,
+          "meanGamma0Power": 0.02555124220353636
+        }
+      }
+    }
+  },
+  "processing": {
+    "geometryCrs": "EPSG:4326",
+    "pixelBoundaryRule": "pixel center",
+    "qualityRule": "Product nodata, nonfinite, and negative pixels excluded; no speckle, terrain, or additional QA filtering applied by this workflow.",
+    "interpretationLimit": "C-band gamma-naught backscatter is affected by vegetation, moisture, roughness, geometry, polarization and processing; it is not a direct soil-moisture or stress measurement."
+  }
+}

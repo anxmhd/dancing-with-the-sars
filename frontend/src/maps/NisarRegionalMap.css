@@ -1,0 +1,67 @@
+
+.nisar-explorer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.nisar-explorer__toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.nisar-explorer__toolbar h2 {
+  margin: 0;
+}
+
+.nisar-explorer__toolbar p {
+  margin: 5px 0 0;
+  color: #777;
+  font-size: 0.9rem;
+}
+
+.nisar-explorer__toolbar label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+.nisar-explorer__toolbar select {
+  padding: 9px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: white;
+  color: #222;
+}
+
+.nisar-explorer__map {
+  width: 100%;
+  height: 520px;
+  min-height: 350px;
+  border-radius: 10px;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.nisar-explorer__message {
+  color: #a35a20;
+  font-size: 0.9rem;
+}
+
+.nisar-explorer__disclaimer {
+  color: #777;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .nisar-explorer__map {
+    height: 420px;
+  }
+}

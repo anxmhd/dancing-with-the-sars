@@ -1,0 +1,84 @@
+{
+  "type": "Feature",
+  "id": "el haouz_Trees_20240110_026",
+  "properties": {
+    "parcel_id": "el haouz_Trees_20240110_026",
+    "reference_source": "Figshare article 28486022 v2, lulc_fielddata parcel shapefile (survey date 2024-01-10)",
+    "source_record_survey_date": "2024-01-10",
+    "source_record_crop_label": "Trees",
+    "source_record_tree_label": "Citrus fruits",
+    "source_record_irrigation_label": "Drip Irrigation",
+    "source_record_season_label": null,
+    "source_record_zone_label": "el haouz",
+    "historical_reference_note": "The survey labels are historical field reference information, not 2026 ground truth for satellite observations.",
+    "geometry_crs": "EPSG:4326",
+    "attribution": "CC BY 4.0; see https://doi.org/10.6084/m9.figshare.28486022.v2"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -7.811381572269711,
+          31.561618491739033
+        ],
+        [
+          -7.8110533956652395,
+          31.559658608240223
+        ],
+        [
+          -7.815960346710599,
+          31.55948846684134
+        ],
+        [
+          -7.816019340476451,
+          31.560459135980956
+        ],
+        [
+          -7.81787728029296,
+          31.560321481898136
+        ],
+        [
+          -7.817790515252153,
+          31.559288017490818
+        ],
+        [
+          -7.819729408448679,
+          31.559066997006884
+        ],
+        [
+          -7.820138717335809,
+          31.56006860248427
+        ],
+        [
+          -7.823471610780268,
+          31.56003101202775
+        ],
+        [
+          -7.823536237304269,
+          31.56299339119064
+        ],
+        [
+          -7.815083664394195,
+          31.563785722507728
+        ],
+        [
+          -7.814998169027133,
+          31.56245071079758
+        ],
+        [
+          -7.813333537364197,
+          31.562454580889074
+        ],
+        [
+          -7.813103016156293,
+          31.56143861715001
+        ],
+        [
+          -7.811381572269711,
+          31.561618491739033
+        ]
+      ]
+    ]
+  }
+}

@@ -4,7 +4,7 @@ Monitoring agricultural dynamics and climate-related vegetation stress in Morocc
 
 ## Project status
 
-The repository contains the approved foundation and reproducible command-line workflows for one real Sentinel-2 L2A, one Sentinel-1 RTC, and one locally supplied NISAR GCOV product. NISAR was read, but the selected parcel's candidate pixels fail the product focus masks; no numeric parcel value is available. The shared version 1.0 multisensor response schema and fixtures are ready for backend/frontend integration. There are no API routes or interactive analysis features, and software-tested observations are not independently scientifically validated. See [the implementation handoff](docs/IMPLEMENTATION_GUIDE.md), [NISAR product validation](docs/NISAR_GCOV_PRODUCT_VALIDATION.md), [project status](docs/STATUS.md), and [the roadmap](docs/ROADMAP.md).
+The repository contains the approved foundation, a read-only multisensor API, and an interactive map/results UI. It now includes 11 real Sentinel-2 L2A and 10 real Sentinel-1 RTC acquisitions for the source-backed El Haouz parcel, plus one locally supplied NISAR GCOV product whose parcel candidates fail focus masks. NISAR measurements remain null; no numeric parcel value is available. The shared version 1.0 multisensor response schema and fixtures constrain the API and frontend. Software-tested observations are not independently scientifically validated. See [the implementation handoff](docs/IMPLEMENTATION_GUIDE.md), [NISAR product validation](docs/NISAR_GCOV_PRODUCT_VALIDATION.md), [project status](docs/STATUS.md), and [the roadmap](docs/ROADMAP.md).
 
 ## Technology
 

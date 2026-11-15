@@ -1,0 +1,44 @@
+{
+  "type": "Feature",
+  "id": "el haouz_Bare soil_20231221_021",
+  "properties": {
+    "parcel_id": "el haouz_Bare soil_20231221_021",
+    "reference_source": "Figshare article 28486022 v2, lulc_fielddata parcel shapefile (survey date 2023-12-21)",
+    "source_record_survey_date": "2023-12-21",
+    "source_record_crop_label": "Bare soil",
+    "source_record_tree_label": null,
+    "source_record_irrigation_label": null,
+    "source_record_season_label": null,
+    "source_record_zone_label": "el haouz",
+    "historical_reference_note": "The survey labels are historical field reference information, not 2026 ground truth for satellite observations.",
+    "geometry_crs": "EPSG:4326",
+    "attribution": "CC BY 4.0; see https://doi.org/10.6084/m9.figshare.28486022.v2"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -8.261575993102879,
+          31.501779298707213
+        ],
+        [
+          -8.259535011325426,
+          31.506863803596623
+        ],
+        [
+          -8.25291027436521,
+          31.504408264525676
+        ],
+        [
+          -8.255293946056877,
+          31.49940714164533
+        ],
+        [
+          -8.261575993102879,
+          31.501779298707213
+        ]
+      ]
+    ]
+  }
+}

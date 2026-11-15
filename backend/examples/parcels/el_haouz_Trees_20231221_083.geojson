@@ -1,0 +1,52 @@
+{
+  "type": "Feature",
+  "id": "el haouz_Trees_20231221_083",
+  "properties": {
+    "parcel_id": "el haouz_Trees_20231221_083",
+    "reference_source": "Figshare article 28486022 v2, lulc_fielddata parcel shapefile (survey date 2023-12-21)",
+    "source_record_survey_date": "2023-12-21",
+    "source_record_crop_label": "Trees",
+    "source_record_tree_label": "Olives",
+    "source_record_irrigation_label": "Drip Irrigation",
+    "source_record_season_label": null,
+    "source_record_zone_label": "el haouz",
+    "historical_reference_note": "The survey labels are historical field reference information, not 2026 ground truth for satellite observations.",
+    "geometry_crs": "EPSG:4326",
+    "attribution": "CC BY 4.0; see https://doi.org/10.6084/m9.figshare.28486022.v2"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -8.152971847499506,
+          31.593433439974177
+        ],
+        [
+          -8.155538410410761,
+          31.59826701888353
+        ],
+        [
+          -8.157279555354167,
+          31.597992948481785
+        ],
+        [
+          -8.160326658957837,
+          31.603097841991868
+        ],
+        [
+          -8.156661775267843,
+          31.604090520271516
+        ],
+        [
+          -8.151244253923151,
+          31.593969676383324
+        ],
+        [
+          -8.152971847499506,
+          31.593433439974177
+        ]
+      ]
+    ]
+  }
+}

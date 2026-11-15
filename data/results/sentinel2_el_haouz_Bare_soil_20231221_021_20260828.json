@@ -1,0 +1,107 @@
+{
+  "source": {
+    "provider": "Copernicus Data Space Ecosystem",
+    "stacItem": "S2B_MSIL2A_20260828T110619_N0512_R137_T29RNQ_20260828T133840",
+    "catalogUrl": "https://stac.dataspace.copernicus.eu/v1/collections/sentinel-2-l2a/items/S2B_MSIL2A_20260828T110619_N0512_R137_T29RNQ_20260828T133840",
+    "mirror": "Microsoft Planetary Computer public Sentinel-2 L2A COG mirror",
+    "mirrorItem": "S2B_MSIL2A_20260828T110619_R137_T29RNQ_20260828T133840",
+    "productUri": "S2B_MSIL2A_20260828T110619_N0512_R137_T29RNQ_20260828T133840.SAFE",
+    "platform": "sentinel-2b",
+    "acquiredAt": "2026-08-28T11:06:19.024000Z",
+    "processingVersion": "05.12",
+    "relativeOrbit": 137,
+    "mgrsTile": "29RNQ",
+    "tileCloudCoverPercent": 0.0,
+    "bands": {
+      "red": {
+        "asset": "B04",
+        "nativeResolutionM": 10,
+        "scale": 0.0001,
+        "offset": -0.1,
+        "sourceAsset": "B04_10m"
+      },
+      "nir": {
+        "asset": "B08",
+        "nativeResolutionM": 10,
+        "scale": 0.0001,
+        "offset": -0.1,
+        "sourceAsset": "B08_10m"
+      },
+      "quality": {
+        "asset": "SCL",
+        "nativeResolutionM": 20,
+        "resampling": "nearest",
+        "sourceAsset": "SCL_20m"
+      }
+    }
+  },
+  "qualityPolicy": {
+    "statistic": "median",
+    "excludedSclClasses": [
+      0,
+      1,
+      3,
+      8,
+      9,
+      10,
+      11
+    ],
+    "allTouched": false,
+    "minimumValidPixels": 5,
+    "minimumValidFraction": 0.5,
+    "retainedSclClassesNote": "SCL 2 (dark area) and 7 (unclassified) are retained; see method limitations."
+  },
+  "observation": {
+    "value": 0.1314304144492824,
+    "quality_status": "accepted",
+    "reasons": [],
+    "total_pixel_count": 3987,
+    "valid_pixel_count": 3987,
+    "excluded_scl_pixel_count": 0,
+    "valid_fraction": 1.0,
+    "provenance": {
+      "parcel_id": "el haouz_Bare soil_20231221_021",
+      "acquisition_id": "S2B_MSIL2A_20260828T110619_N0512_R137_T29RNQ_20260828T133840",
+      "acquisition_date": "2026-08-28",
+      "source_product": "Sentinel-2 MSI Level-2A surface reflectance",
+      "source_product_version": "05.12",
+      "method": "sentinel-2-parcel-ndvi-provisional-v1",
+      "geometry_crs": "EPSG:4326",
+      "raster_crs": "EPSG:32629",
+      "raster_transform": [
+        570120.0,
+        10.0,
+        0.0,
+        3486020.0,
+        0.0,
+        -10.0
+      ],
+      "scl_crs": "EPSG:32629",
+      "scl_transform": [
+        570120.0,
+        20.0,
+        0.0,
+        3486020.0,
+        0.0,
+        -20.0
+      ],
+      "statistic": "median",
+      "excluded_scl_classes": [
+        0,
+        1,
+        3,
+        8,
+        9,
+        10,
+        11
+      ],
+      "all_touched": false,
+      "minimum_valid_pixels": 5,
+      "minimum_valid_fraction": 0.5,
+      "red_scale": 0.0001,
+      "red_offset": -0.1,
+      "nir_scale": 0.0001,
+      "nir_offset": -0.1
+    }
+  }
+}

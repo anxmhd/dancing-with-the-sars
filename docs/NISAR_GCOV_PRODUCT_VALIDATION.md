@@ -3,7 +3,7 @@
 **Product:** `NISAR_L2_PR_GCOV_035_023_D_073_2005_DHDH_M_20261106T192031_192107_P05036_N_F_J_001`
 **Validation date:** 2026-11-14
 **Scope:** inspect the supplied HDF5 product, correct the local reader where product evidence required it, and evaluate the El Haouz reference parcel.
-**Outcome:** the HDF5 product was read successfully, but the source masks reject all parcel candidate pixels. No accepted parcel-level backscatter statistic is available.
+**Outcome:** the HDF5 product was read successfully, but the source masks reject all parcel candidate pixels. No accepted parcel-level backscatter statistic is available for this parcel. The same granule does pass the unchanged policy for three other El Haouz parcels; see [the multisensor campaign report](MULTISENSOR_CAMPAIGN_2026.md).
 
 ## Product and layers inspected
 

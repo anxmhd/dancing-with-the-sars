@@ -383,6 +383,19 @@ def main() -> None:
     parser.add_argument("--parcel", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--frequency", choices=("A", "B", "both"), default="both")
+    parser.add_argument(
+        "--catalog-collection",
+        default=None,
+        help="Optional source collection identifier established outside the HDF5 product",
+    )
+    parser.add_argument(
+        "--catalog-item-id",
+        default=None,
+        help="Optional source catalog/granule identifier distinct from the product filename",
+    )
+    parser.add_argument(
+        "--catalog-url", default=None, help="Optional exact source catalog record URL"
+    )
     args = parser.parse_args()
     feature = json.loads(args.parcel.read_text(encoding="utf-8"))
     if feature.get("type") != "Feature" or not feature.get("geometry"):
@@ -419,6 +432,31 @@ def main() -> None:
     start = identification.get("zeroDopplerStartTime")
     product_id = identification.get("granuleId") or args.product.stem
     acquisition_date = date.fromisoformat(start[:10]).isoformat() if start else None
+    has_accepted_measurement = any(r["status"] == "available" for r in measurements)
+    if has_accepted_measurement:
+        mask_limitation = (
+            "Accepted values are the median of parcel pixel centers that passed the source "
+            "GCOV mask, channel focus-validity bit, and sample-slip rules for this granule; "
+            "acceptance does not establish calibration accuracy or field validity."
+        )
+    else:
+        mask_limitation = (
+            "The source masks reject every candidate parcel pixel for this granule, "
+            "so no accepted parcel-level value is available."
+        )
+    catalog_provider = (
+        args.catalog_collection or args.catalog_item_id or args.catalog_url
+    ) and "Supplied via the NASA ASF DAAC catalog search; product file supplied locally"
+    source_processing_note = (
+        "The exact catalog record and download URL were not retained with the local file; "
+        "source identity is verified from its internal granuleId."
+        if catalog_provider is None
+        else (
+            "Catalog membership was established through the NASA ASF DAAC search API, but "
+            "the product file was supplied locally, so the exact transfer record and "
+            "maturity metadata are not independently verified here."
+        )
+    )
     first_product_metadata = measurements[0]["source"]["productMetadata"]
     layer_metadata_keys = {
         "sourceLayer",
@@ -457,11 +495,12 @@ def main() -> None:
                     "productFrequencies": ["A", "B"],
                 },
                 "source": {
-                    "catalogProvider": "Not recorded in the supplied local HDF5 product",
+                    "catalogProvider": catalog_provider
+                    or "Not recorded in the supplied local HDF5 product",
                     "dataset": "NISAR Level-2 Geocoded Polarimetric Covariance (GCOV)",
-                    "collectionId": None,
-                    "catalogItemId": None,
-                    "catalogUrl": None,
+                    "collectionId": args.catalog_collection,
+                    "catalogItemId": args.catalog_item_id,
+                    "catalogUrl": args.catalog_url,
                     "sourceProductIdentifier": product_id,
                     "productUri": None,
                     "processingVersion": identification.get("productVersion"),
@@ -474,13 +513,10 @@ def main() -> None:
                     "processingLevel": identification.get("productLevel"),
                     "assetSource": {
                         "provider": "User-supplied local HDF5 product; path omitted",
-                        "collectionId": None,
+                        "collectionId": args.catalog_collection,
                         "itemId": product_id,
                     },
-                    "sourceProcessingNote": (
-                        "The exact catalog record and download URL were not retained with the "
-                        "local file; source identity is verified from its internal granuleId."
-                    ),
+                    "sourceProcessingNote": source_processing_note,
                     "productMetadata": {
                         key: value
                         for key, value in first_product_metadata.items()
@@ -540,10 +576,7 @@ def main() -> None:
                     for r in measurements
                 ],
                 "limitations": [
-                    (
-                        "The source masks reject every candidate parcel pixel for this granule, "
-                        "so no accepted parcel-level value is available."
-                    ),
+                    mask_limitation,
                     (
                         "The product records gamma-zero power in unit 1. It is not a direct "
                         "soil-moisture or vegetation-stress measurement."

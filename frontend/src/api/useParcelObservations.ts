@@ -11,17 +11,24 @@ export interface ObservationState {
 
 export function useParcelObservations(
   parcelId: string,
-  query: ObservationQuery,
+  query: ObservationQuery | null,
 ): ObservationState {
   const [data, setData] = useState<MultisensorResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<ApiError | null>(null);
 
-  const startDate = query.startDate;
-  const endDate = query.endDate;
-  const missionsKey = query.missions.join(",");
+  const startDate = query?.startDate ?? "";
+  const endDate = query?.endDate ?? "";
+  const missionsKey = query?.missions.join(",") ?? "";
 
   useEffect(() => {
+    if (!parcelId || !query) {
+      setData(null);
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
     const controller = new AbortController();
     setLoading(true);
     setError(null);
@@ -43,7 +50,7 @@ export function useParcelObservations(
       });
 
     return () => controller.abort();
-  }, [parcelId, startDate, endDate, missionsKey]);
+  }, [parcelId, startDate, endDate, missionsKey, query]);
 
   return { data, loading, error };
 }

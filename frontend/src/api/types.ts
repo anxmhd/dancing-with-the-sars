@@ -21,6 +21,11 @@ export interface ParcelFeature {
   geometry: GeoJsonGeometry | null;
 }
 
+export interface ParcelCollection {
+  type: "FeatureCollection";
+  features: ParcelFeature[];
+}
+
 export interface SensorResult {
   mission: Mission;
   status: SensorStatus;
@@ -29,6 +34,20 @@ export interface SensorResult {
 
 export interface MeasurementQuality {
   status: string;
+  flags?: string[];
+  reasons?: string[];
+  validPixelCount?: number;
+  totalPixelCount?: number;
+  validPixelFraction?: number;
+  excludedPixelCount?: number;
+  [key: string]: unknown;
+}
+
+export interface MeasurementGrid {
+  crs?: string;
+  resolution?: number[];
+  resolutionUnit?: string;
+  transformGdal?: number[];
   [key: string]: unknown;
 }
 
@@ -38,12 +57,33 @@ export interface Measurement {
   unit: string;
   representation: string;
   statistic?: string;
+  unitStatus?: string;
   quality?: MeasurementQuality;
   processing?: Record<string, unknown>;
   polarization?: string;
   frequency?: string;
   frequencyBand?: string;
   covarianceTerm?: string;
+  frequencyHz?: number;
+  grid?: MeasurementGrid;
+}
+
+export interface ObservationSource {
+  catalogProvider?: string | null;
+  dataset?: string;
+  collectionId?: string;
+  catalogItemId?: string | null;
+  catalogUrl?: string | null;
+  sourceProductIdentifier?: string | null;
+  productUri?: string | null;
+  processingVersion?: string | null;
+  processingDateTime?: string | null;
+  productType?: string | null;
+  processingLevel?: string | null;
+  assetSource?: string | null;
+  sourceProcessingNote?: string | null;
+  productMetadata?: Record<string, unknown> | null;
+  [key: string]: unknown;
 }
 
 export interface Observation {
@@ -53,7 +93,7 @@ export interface Observation {
   platform: string;
   instrument: string;
   sensorDetails: Record<string, unknown>;
-  source: Record<string, unknown>;
+  source: ObservationSource;
   measurements: Measurement[];
   limitations: string[];
 }
